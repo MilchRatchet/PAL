@@ -4,5 +4,5 @@ file(GLOB SOURCES
 file(GLOB HEADERS
     "*.h")
 
-add_library(lib_test STATIC ${SOURCES} ${HEADERS})
-target_include_directories(lib_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(TEST ${SOURCES} ${HEADERS})
+target_include_directories(TEST PUBLIC ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

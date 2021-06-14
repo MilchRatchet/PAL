@@ -4,5 +4,10 @@ file(GLOB SOURCES
 file(GLOB HEADERS
     "*.h")
 
-add_library(lib_VL STATIC ${SOURCES} ${HEADERS})
-target_include_directories(lib_VL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(VLL STATIC ${SOURCES} ${HEADERS})
+target_include_directories(VLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_custom_command(TARGET VLL POST_BUILD
+               COMMAND ${CMAKE_COMMAND} -E copy_if_different
+               "${HEADERS}"
+                ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

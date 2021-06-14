@@ -4,5 +4,10 @@ file(GLOB SOURCES
 file(GLOB HEADERS
     "*.h")
 
-add_library(lib_CG STATIC ${SOURCES} ${HEADERS})
-target_include_directories(lib_CG PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(CGL STATIC ${SOURCES} ${HEADERS})
+target_include_directories(CGL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_custom_command(TARGET CGL POST_BUILD
+               COMMAND ${CMAKE_COMMAND} -E copy_if_different
+               "${HEADERS}"
+                ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
