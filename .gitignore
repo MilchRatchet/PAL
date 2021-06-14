@@ -1,8 +1,8 @@
 # ignore build directory
 /build
 
-# ignore json files
-*.json
+# ignore vscode files
+.vscode
 
 # ignore cmake outputs
 CMakeFiles
