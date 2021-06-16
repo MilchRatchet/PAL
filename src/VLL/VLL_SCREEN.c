@@ -2,6 +2,9 @@
 #include "VLL_SCREEN.h"
 
 void VLL_SCREEN_INIT(VLL_Screen* screen) {
+  if (!screen)
+    return;
+
   SDL_Init(SDL_INIT_VIDEO);
   screen->window =
     SDL_CreateWindow("VLL - Screen", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
@@ -26,6 +29,9 @@ void VLL_SCREEN_INIT(VLL_Screen* screen) {
 }
 
 void VLL_SCREEN_DESTROY(VLL_Screen* screen) {
+  if (!screen)
+    return;
+
   SDL_DestroyWindow(screen->window);
   SDL_Quit();
 }
