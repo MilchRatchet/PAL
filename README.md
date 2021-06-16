@@ -5,3 +5,12 @@
 - `AAL` (Approximation Algorithm Library)
 - `CGL` (Computational Geometry Library)
 - `VLL` (Visualization Layer Library)
+
+# Requirements
+
+## Linux (Debian-based)
+
+You need to install `SDL2`. For development use
+```
+apt-get install libsdl2-dev
+```
