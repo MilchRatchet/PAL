@@ -1,10 +1,10 @@
-#include "setcover.h"
+#include "AAL_setcover.h"
 
 #include <algorithm>
 #include <vector>
 
 template <typename T>
-size_t indexMax(const std::vector<T>& vec) {
+static size_t indexMax(const std::vector<T>& vec) {
   size_t index = 0;
   for (size_t i = 0; i < vec.size(); ++i) {
     if (vec[i] > vec[index]) {
@@ -15,7 +15,7 @@ size_t indexMax(const std::vector<T>& vec) {
 }
 
 template <typename T>
-void remove(std::vector<T>& vec1, std::vector<T>& vec2, double& sum) {
+static void remove(std::vector<T>& vec1, std::vector<T>& vec2) {
   std::sort(vec1.begin(), vec1.end());
   std::sort(vec2.begin(), vec2.end());
   std::vector<size_t> indexes;
@@ -34,7 +34,6 @@ void remove(std::vector<T>& vec1, std::vector<T>& vec2, double& sum) {
   }
 
   for (int k = indexes.size() - 1; k >= 0; --k) {
-    sum -= vec1[indexes[k]];
     if (indexes[k] == vec1.size() - 1) {
       vec1.pop_back();
     }
@@ -45,7 +44,7 @@ void remove(std::vector<T>& vec1, std::vector<T>& vec2, double& sum) {
   }
 }
 
-setcoverResult setcover_greedy(setcoverInstance instance) {
+setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
   // rewrite the data in a more comftable vector datastructure
   std::vector<std::vector<int>> remainingSets(instance.numberOfSubsets);
   size_t iterator = 0;
@@ -58,28 +57,19 @@ setcoverResult setcover_greedy(setcoverInstance instance) {
   }
 
   size_t remainingObjects = instance.totalSetSize;
-  std::vector<double> sums(instance.numberOfSubsets);
-  std::vector<double> ratio(instance.numberOfSubsets);
-
-  // initialize the values for all given subsets
-  for (size_t i = 0; instance.numberOfSubsets; ++i) {
-    double sum = 0;
-    for (size_t j = 0; j < instance.subsetSizes[i]; ++j) {
-      sum += remainingSets[i][j];
-    }
-    sums[i] = sum;
-  }
+  std::vector<float> sums(instance.numberOfSubsets);
+  std::vector<float> ratio(instance.numberOfSubsets);
 
   // the main algorithm
   std::vector<int> choosenSets;
   while (remainingObjects > 0) {
     for (size_t i = 0; instance.numberOfSubsets; ++i) {
-      ratio[i] = sums[i] / remainingSets[i].size();
+      ratio[i] = instance.weights[i] / remainingSets[i].size();
     }
     size_t index = indexMax(ratio);
     choosenSets.push_back(index);
     for (size_t i = 0; i < instance.numberOfSubsets; ++i) {
-      remove(remainingSets[i], remainingSets[index], sums[i]);
+      remove(remainingSets[i], remainingSets[index]);
     }
   }
 
@@ -90,5 +80,12 @@ setcoverResult setcover_greedy(setcoverInstance instance) {
   }
 
   // convert result to the output struct
-
+  setcoverResult result;
+  result.subsets = new int[choosenSets.size()];
+  result.objectiveValue = 0;
+  for(size_t i=0; i<choosenSets.size(); ++i) {
+    result.subsets[i] = choosenSets[i];
+    result.objectiveValue += instance.weights[choosenSets[i]];
+  }
+  return result;
 }
