@@ -1,10 +1,9 @@
-#include "AAL_UTILS.h"
-#include <stdio.h>
+#include "TEST_CONVEXHULL.h"
 
 /*
  * This is supposed to test the libraries
  */
 int main() {
-  example();
+  TEST_CONVEXHULL_JARVIS();
   return 0;
 }

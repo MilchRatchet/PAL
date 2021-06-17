@@ -51,23 +51,28 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) 
       hull = realloc(hull, sizeof(unsigned int) * hull_length);
     }
 
-    last = 0;
+    last                 = 0;
+    const CGL_Point_t p1 = points[hull[k]];
+    CGL_Point_t p2       = points[last];
 
     for (unsigned int j = 0; j < count; j++) {
       if (last == point_on_hull) {
         last = j;
       }
       else {
-        const CGL_Point_t p1 = points[k];
-        const CGL_Point_t p2 = points[last];
-        const CGL_Point_t p  = points[j];
+        const CGL_Point_t p = points[j];
 
-        if (CGL_UTILS_ORIENTATION(p1, p2, p) == -1)
+        if (CGL_UTILS_ORIENTATION(p1, p2, p) == -1) {
           last = j;
+          p2   = points[last];
+        }
       }
     }
 
     k++;
+
+    if (k == count)
+      break;
 
     point_on_hull = last;
   }

@@ -25,4 +25,6 @@ struct vll_line {
   VLL_Color_t color;
 } typedef VLL_Line_t;
 
+VLL_Color_t VLL_UTILS_GETCOLOR(VLL_Color_Preset_t preset);
+
 #endif /* VLL_UTILS_H */

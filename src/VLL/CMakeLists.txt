@@ -1,5 +1,5 @@
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -lSDL2main -lSDL2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2main -lSDL2")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wl,-Bstatic -lSDL2main -lSDL2 -Wl,-Bdynamic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wl,-Bstatic -lSDL2main -lSDL2 -Wl,-Bdynamic")
 
 file(GLOB SOURCES
     "*.cpp"
@@ -8,6 +8,8 @@ file(GLOB HEADERS
     "*.h")
 
 add_library(VLL STATIC ${SOURCES} ${HEADERS})
+target_link_libraries(VLL SDL2main SDL2)
+
 target_include_directories(VLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 #

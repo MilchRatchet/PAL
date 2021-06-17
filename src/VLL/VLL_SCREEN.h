@@ -2,6 +2,7 @@
 #define VLL_SCREEN_H
 
 #include <SDL2/SDL.h>
+#include "VLL_CONTAINER.h"
 
 struct vll_screen {
   SDL_Window* window;
@@ -10,6 +11,9 @@ struct vll_screen {
 } typedef VLL_Screen_t;
 
 void VLL_SCREEN_INIT(VLL_Screen_t* screen);
+void VLL_SCREEN_DRAW(VLL_Screen_t* screen, VLL_Container_t* container);
+void VLL_SCREEN_CLEAR(VLL_Screen_t* screen);
+void VLL_SCREEN_UPDATE(VLL_Screen_t* screen);
 void VLL_SCREEN_DESTROY(VLL_Screen_t* screen);
 
 #endif /* VLL_SCREEN_H */

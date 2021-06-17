@@ -10,6 +10,6 @@
  * Discrete & Computational Geometry 18:305-363, 1997.
  */
 int CGL_UTILS_ORIENTATION(CGL_Point_t a, CGL_Point_t b, CGL_Point_t p) {
-  const int v = (int) (-1.0f * ((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)));
-  return (v > 0) - (v < 0);
+  const float v = ((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x));
+  return (v < 0) ? 1 : ((v == 0) ? 0 : -1);
 }
