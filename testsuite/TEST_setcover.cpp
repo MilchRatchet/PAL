@@ -5,18 +5,24 @@
 #include "AAL_setcover.h"
 #include "testsuite_UTILS.h"
 
-void TEST_setcover() {
+extern "C" void TEST_setcover() {
   int* totalSet                = (int*) malloc(sizeof(int) * 5);
+  unsigned int totalSetSize    = 8;
   int* subsets                 = (int*) malloc(sizeof(int) * 16);
   unsigned int* subsetSizes    = (unsigned int*) malloc(sizeof(unsigned int) * 5);
   unsigned int numberOfSubsets = 5;
   float* weights               = (float*) malloc(sizeof(float) * 5);
 
-  for (size_t i = 0; i < 5; ++i) {
-    totalSet[i]    = i + 1;
+  for (size_t i = 0; i < totalSetSize; ++i) {
+    totalSet[i] = i;
+  }
+
+  for (size_t i = 0; i < numberOfSubsets; ++i) {
     subsetSizes[i] = 3;
     weights[i]     = i + 1;
   }
+
+  // the middle vertex has degree 4
   subsetSizes[4] = 4;
 
   subsets[0]  = 0;
@@ -36,13 +42,13 @@ void TEST_setcover() {
   subsets[14] = 6;
   subsets[15] = 7;
 
-  setcoverInstance instance{totalSet, 8, subsets, subsetSizes, numberOfSubsets, weights};
+  setcoverInstance instance{totalSet, totalSetSize, subsets, subsetSizes, numberOfSubsets, weights};
 
   setcoverResult result = AAL_setcover_greedy(instance);
 
   print_check(result.objectiveValue == 10, "Objective value");
 
-  free(instance.totalSet);
+  free(totalSet);
   free(instance.subsets);
   free(instance.subsetSizes);
   free(instance.weights);

@@ -14,9 +14,17 @@ struct setcoverResult {
   float objectiveValue;
 };
 
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
 /*!
  * \brief setcover_greedy
  * \param instance.subsets setcover_greedy expects the subsets subsequent in one vector
  * \param instance.subsetSizes is used to seperate the subsets
  */
 setcoverResult AAL_setcover_greedy(setcoverInstance &instance);
+
+#ifdef __cplusplus
+  }
+#endif

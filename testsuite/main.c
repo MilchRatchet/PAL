@@ -8,6 +8,6 @@
  */
 int main() {
   example();
-  TEST_setcover ();
+  TEST_setcover();
   return 0;
 }
