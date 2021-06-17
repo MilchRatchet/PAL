@@ -3,24 +3,26 @@
 
 #include <stdint.h>
 
+enum vll_color_preset { RED, GREEN, BLUE } typedef VLL_Color_Preset_t;
+
 struct vll_color {
   uint8_t r;
   uint8_t g;
   uint8_t b;
-} typedef VLL_Color;
+} typedef VLL_Color_t;
 
 struct vll_point {
   float x;
   float y;
   float radius;
-  VLL_Color color;
-} typedef VLL_Point;
+  VLL_Color_t color;
+} typedef VLL_Point_t;
 
 struct vll_line {
-  VLL_Point a;
-  VLL_Point b;
+  VLL_Point_t a;
+  VLL_Point_t b;
   float thickness;
-  VLL_Color color;
-} typedef VLL_Line;
+  VLL_Color_t color;
+} typedef VLL_Line_t;
 
 #endif /* VLL_UTILS_H */

@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
 #include "VLL_SCREEN.h"
+#include "VLL_CONTAINER.h"
 
-void VLL_SCREEN_INIT(VLL_Screen* screen) {
+void VLL_SCREEN_INIT(VLL_Screen_t* screen) {
   if (!screen)
     return;
 
@@ -28,7 +29,42 @@ void VLL_SCREEN_INIT(VLL_Screen* screen) {
   screen->surface = SDL_CreateRGBSurface(0, 1280, 720, 24, rmask, gmask, bmask, amask);
 }
 
-void VLL_SCREEN_DESTROY(VLL_Screen* screen) {
+/*
+ * Preliminary, does not draw lines and points are rectangles
+ */
+void VLL_SCREEN_DRAW(VLL_Screen_t* screen, VLL_Container_t* container) {
+  int width;
+  int height;
+
+  SDL_GetWindowSize(screen->window, &width, &height);
+
+  SDL_Rect p;
+  uint32_t c;
+
+  for (unsigned int i = 0; i < container->points_count; i++) {
+    VLL_Point_t point = container->points[i];
+
+    p.w = ((int) (point.radius * 2.0)) + 1;
+    p.h = p.w;
+    p.x = point.x * width - p.w / 2;
+    p.y = (1.0f - point.y) * height - p.w / 2;
+
+    c = (point.color.r) | (point.color.g << 8) | (point.color.b << 16);
+
+    SDL_FillRect(screen->surface, &p, c);
+  }
+}
+
+void VLL_SCREEN_CLEAR(VLL_Screen_t* screen) {
+  SDL_FillRect(screen->surface, NULL, 0x00000000);
+}
+
+void VLL_SCREEN_UPDATE(VLL_Screen_t* screen) {
+  SDL_BlitSurface(screen->surface, 0, screen->window_surface, 0);
+  SDL_UpdateWindowSurface(screen->window);
+}
+
+void VLL_SCREEN_DESTROY(VLL_Screen_t* screen) {
   if (!screen)
     return;
 
