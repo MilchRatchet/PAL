@@ -44,7 +44,7 @@ static void remove(std::vector<T>& vec1, std::vector<T>& vec2) {
   }
 }
 
-setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
+setcoverResult AAL_setcover_greedy(setcoverInstance& instance) {
   // rewrite the data in a more comftable vector datastructure
   std::vector<std::vector<int>> remainingSets(instance.numberOfSubsets);
   size_t iterator = 0;
@@ -64,7 +64,7 @@ setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
   std::vector<int> choosenSets;
   while (remainingObjects > 0) {
     for (size_t i = 0; instance.numberOfSubsets; ++i) {
-      ratio[i] = instance.weights[i] / remainingSets[i].size();
+      ratio[i] = remainingSets[i].size() / instance.weights[i];
     }
     size_t index = indexMax(ratio);
     choosenSets.push_back(index);
@@ -81,9 +81,9 @@ setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
 
   // convert result to the output struct
   setcoverResult result;
-  result.subsets = new int[choosenSets.size()];
+  result.subsets        = new int[choosenSets.size()];
   result.objectiveValue = 0;
-  for(size_t i=0; i<choosenSets.size(); ++i) {
+  for (size_t i = 0; i < choosenSets.size(); ++i) {
     result.subsets[i] = choosenSets[i];
     result.objectiveValue += instance.weights[choosenSets[i]];
   }

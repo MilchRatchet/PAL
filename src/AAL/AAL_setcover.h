@@ -19,4 +19,4 @@ struct setcoverResult {
  * \param instance.subsets setcover_greedy expects the subsets subsequent in one vector
  * \param instance.subsetSizes is used to seperate the subsets
  */
-setcoverResult AAL_setcover_greedy(setcoverInstance instance);
+setcoverResult AAL_setcover_greedy(setcoverInstance &instance);
