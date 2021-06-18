@@ -1,5 +1,5 @@
 #include <stdio.h>
 
-void example() {
+extern "C" void example() {
   printf("AAL Test\n");
 }
