@@ -26,5 +26,17 @@ void print_check(const bool b, const std::string& str) {
   else {
     print_lightred("[FAILED]");
   }
-  std::cout << " " << str <<"\n";
+  std::cout << " " << str << "\n";
+}
+
+bool compareAryInt(const int* a, const unsigned int size_a, const int* b, const unsigned int size_b) {
+  if (size_a != size_b) {
+    return false;
+  }
+  for (unsigned int i = 0; i < size_a; ++i) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
 }

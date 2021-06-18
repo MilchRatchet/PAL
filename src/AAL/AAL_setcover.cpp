@@ -77,12 +77,9 @@ extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance& instance) {
   std::vector<float> sums(instance.numberOfSubsets);
   std::vector<float> ratio(instance.numberOfSubsets);
 
-  // DEBUG
-  unsigned int count = 0;
-
   // the main algorithm
   std::vector<int> choosenSets;
-  while (remainingObjects.size() > 0 && count < instance.numberOfSubsets) {
+  while (remainingObjects.size() > 0) {
     for (size_t i = 0; i < instance.numberOfSubsets; ++i) {
       ratio[i] = remainingSets[i].size() / instance.weights[i];
     }
@@ -97,13 +94,13 @@ extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance& instance) {
     // check there are still objects left
     remove(remainingObjects, remainingSets[index]);
     remainingSets[index].resize(0);  // make sure this set won't be considered a second time
-    ++count;
   }
 
   // convert result to the output struct
-  int* subsets         = (int*)malloc(sizeof (int)*choosenSets.size ());
-  float objectiveValue = 0;
-  setcoverResult result{subsets,objectiveValue};
+  unsigned int numberOfSubsets = choosenSets.size();
+  int* subsets                 = (int*) malloc(sizeof(int) * numberOfSubsets);
+  float objectiveValue         = 0;
+  setcoverResult result{subsets, numberOfSubsets, objectiveValue};
   for (size_t i = 0; i < choosenSets.size(); ++i) {
     result.subsets[i] = choosenSets[i];
     result.objectiveValue += instance.weights[choosenSets[i]];

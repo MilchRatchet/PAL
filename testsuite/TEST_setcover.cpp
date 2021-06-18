@@ -25,6 +25,7 @@ extern "C" void TEST_setcover() {
   // the middle vertex has degree 4
   subsetSizes[4] = 4;
 
+  // list the objects contained by the subsets
   subsets[0]  = 0;
   subsets[1]  = 4;
   subsets[2]  = 3;
@@ -42,11 +43,19 @@ extern "C" void TEST_setcover() {
   subsets[14] = 6;
   subsets[15] = 7;
 
-  setcoverInstance instance{totalSet, totalSetSize, subsets, subsetSizes, numberOfSubsets, weights};
+  // the indexes of the subsets the should be the result of the algorithm
+  int* subsets_cmp = (int*) malloc(sizeof(int) * 4);
+  for (unsigned int i = 0; i < 4; ++i) {
+    subsets_cmp[i] = i;
+  }
 
+  // create an instance for the setcover problem
+  setcoverInstance instance{totalSet, totalSetSize, subsets, subsetSizes, numberOfSubsets, weights};
+  // run the greedy setcover algorithm
   setcoverResult result = AAL_setcover_greedy(instance);
 
   print_check(result.objectiveValue == 10, "Objective value");
+  print_check(compareAryInt(result.subsets, result.numberOfSubsets, subsets_cmp, 4), "subsets");
 
   free(totalSet);
   free(instance.subsets);
@@ -54,4 +63,5 @@ extern "C" void TEST_setcover() {
   free(instance.weights);
 
   free(result.subsets);
+  free(subsets_cmp);
 }

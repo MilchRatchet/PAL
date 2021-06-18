@@ -11,6 +11,7 @@ struct setcoverInstance {
 
 struct setcoverResult {
   int* subsets;
+  unsigned int numberOfSubsets;
   float objectiveValue;
 };
 
@@ -22,6 +23,7 @@ struct setcoverResult {
  * \brief setcover_greedy
  * \param instance.subsets setcover_greedy expects the subsets subsequent in one vector
  * \param instance.subsetSizes is used to seperate the subsets
+ * \details weights have to be stricly positive
  */
 setcoverResult AAL_setcover_greedy(setcoverInstance &instance);
 
