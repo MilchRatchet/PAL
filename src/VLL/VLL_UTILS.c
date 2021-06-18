@@ -61,7 +61,17 @@ VLL_Color_t VLL_UTILS_COLOR(const int code) {
   return c;
 }
 
-void VLL_RenderDrawCircle(SDL_Renderer* renderer, int x, int y, float radius) {
+VLL_Point_t VLL_UTILS_GETPOINT(float x, float y, int radius, VLL_Color_t color) {
+  VLL_Point_t p = {.x = x, .y = y, .radius = radius, .color = color};
+  return p;
+}
+
+VLL_Line_t VLL_UTILS_GETLINE(VLL_Point_t a, VLL_Point_t b, VLL_Color_t color) {
+  VLL_Line_t line = {.a = a, .b = b, .color = color};
+  return line;
+}
+
+void VLL_RenderDrawCircle(SDL_Renderer* renderer, int x, int y, int radius) {
   int head_x = radius - 1;
   int head_y = 0;
   int d_x    = 1;

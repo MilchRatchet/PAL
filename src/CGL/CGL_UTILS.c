@@ -2,7 +2,7 @@
 #include "CGL_UTILS.h"
 
 /*
- * Returns 1 if `p` is on the right side of the line `a`->`b`, 0 if the points are colinear, -1 else
+ * Returns 1 if `p` is on the right side of the line `a`->`b`, 0 if the points are collinear, -1 else
  *
  * For more robustness consider:
  *

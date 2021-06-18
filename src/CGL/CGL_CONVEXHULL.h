@@ -8,6 +8,7 @@ struct cgl_convexhull {
   unsigned int count;
 } typedef CGL_Convexhull_t;
 
+void CGL_CONVEXFULL_FREE(CGL_Convexhull_t* hull);
 CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count);
 
 #endif /* CGL_CONVEXHULL_H */

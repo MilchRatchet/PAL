@@ -27,19 +27,20 @@ struct vll_color {
 struct vll_point {
   float x;
   float y;
-  float radius;
+  int radius;
   VLL_Color_t color;
 } typedef VLL_Point_t;
 
 struct vll_line {
   VLL_Point_t a;
   VLL_Point_t b;
-  float thickness;
   VLL_Color_t color;
 } typedef VLL_Line_t;
 
 VLL_Color_t VLL_UTILS_GETCOLOR(VLL_Color_Preset_t preset);
 VLL_Color_t VLL_UTILS_COLOR(const int code);
-void VLL_RenderDrawCircle(SDL_Renderer* renderer, int x, int y, float radius);
+VLL_Point_t VLL_UTILS_GETPOINT(float x, float y, int radius, VLL_Color_t color);
+VLL_Line_t VLL_UTILS_GETLINE(VLL_Point_t a, VLL_Point_t b, VLL_Color_t color);
+void VLL_RenderDrawCircle(SDL_Renderer* renderer, int x, int y, int radius);
 
 #endif /* VLL_UTILS_H */

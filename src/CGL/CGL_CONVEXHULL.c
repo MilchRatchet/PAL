@@ -3,9 +3,20 @@
 #include "CGL_CONVEXHULL.h"
 #include "CGL_UTILS.h"
 
+void CGL_CONVEXFULL_FREE(CGL_Convexhull_t* hull) {
+  free(hull->points);
+}
+
 /*
+ * Jarvis march, convex hull algorithm
+ * Time Complexity: O(nh)
+ * Space Complexity: O(h)
+ * where n = "number of points" and h = "number of points in convex hull"
+ *
  * Takes a list of `count` many points.
- * Returns a the list of indices of the points that lie on the convex hull.
+ * Returns the list of indices of the points that lie on the convex hull in order.
+ *
+ * WARNING: May fail when more than 2 points are collinear.
  */
 CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) {
   CGL_Convexhull_t err_result = {.points = 0, .count = -1};
@@ -58,6 +69,7 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) 
     for (unsigned int j = 0; j < count; j++) {
       if (last == point_on_hull) {
         last = j;
+        p2   = points[last];
       }
       else {
         const CGL_Point_t p = points[j];
@@ -70,9 +82,6 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) 
     }
 
     k++;
-
-    if (k == count)
-      break;
 
     point_on_hull = last;
   }
