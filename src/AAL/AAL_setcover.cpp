@@ -101,9 +101,9 @@ extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance& instance) {
   }
 
   // convert result to the output struct
-  setcoverResult result;
-  result.subsets        = new int[choosenSets.size()];
-  result.objectiveValue = 0;
+  int* subsets         = (int*)malloc(sizeof (int)*choosenSets.size ());
+  float objectiveValue = 0;
+  setcoverResult result{subsets,objectiveValue};
   for (size_t i = 0; i < choosenSets.size(); ++i) {
     result.subsets[i] = choosenSets[i];
     result.objectiveValue += instance.weights[choosenSets[i]];

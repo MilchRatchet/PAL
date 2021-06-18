@@ -6,7 +6,7 @@
 #include "testsuite_UTILS.h"
 
 extern "C" void TEST_setcover() {
-  int* totalSet                = (int*) malloc(sizeof(int) * 5);
+  int* totalSet                = (int*) malloc(sizeof(int) * 8);
   unsigned int totalSetSize    = 8;
   int* subsets                 = (int*) malloc(sizeof(int) * 16);
   unsigned int* subsetSizes    = (unsigned int*) malloc(sizeof(unsigned int) * 5);

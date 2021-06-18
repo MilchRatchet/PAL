@@ -26,5 +26,5 @@ void print_check(const bool b, const std::string& str) {
   else {
     print_lightred("[FAILED]");
   }
-  std::cout << " " << str;
+  std::cout << " " << str <<"\n";
 }
