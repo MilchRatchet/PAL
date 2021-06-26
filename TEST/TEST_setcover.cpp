@@ -3,7 +3,7 @@
 #include <fstream>
 
 #include "AAL_setcover.h"
-#include "testsuite_UTILS.h"
+#include "TEST_UTILS.h"
 
 extern "C" void TEST_setcover() {
   int* totalSet                = (int*) malloc(sizeof(int) * 8);

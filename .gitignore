@@ -6,6 +6,9 @@
 
 # ignore cmake outputs
 CMakeFiles
+.cmake/*
 Makefile
 CMakeCache.txt
 *.user
+
+
