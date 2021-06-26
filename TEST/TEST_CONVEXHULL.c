@@ -7,6 +7,7 @@
 #include "VLL_SCREEN.h"
 #include "VLL_CONTAINER.h"
 #include "VLL_UTILS.h"
+#include "TEST_UTILS.h"
 
 void TEST_CONVEXHULL_JARVIS() {
   srand(clock());
@@ -22,8 +23,6 @@ void TEST_CONVEXHULL_JARVIS() {
   }
 
   CGL_Convexhull_t result = CGL_CONVEXHULL_JARVIS(points, count);
-
-  printf("POINTS: %d HULL: %d\n", count, result.count);
 
   VLL_Screen_t screen;
   VLL_SCREEN_INIT(&screen);
@@ -55,7 +54,16 @@ void TEST_CONVEXHULL_JARVIS() {
 
   VLL_SCREEN_UPDATE(&screen);
 
-  getchar();
+  int success = VLL_SCREEN_GETUSERVALIDATION(&screen);
+
+  if (success) {
+    TEST_PRINT_GREEN("[PASSED]");
+  }
+  else {
+    TEST_PRINT_RED("[FAILED]");
+  }
+
+  printf(" CGL_CONVEXHULL_JARVIS\n");
 
   VLL_SCREEN_DESTROY(&screen);
   VLL_CONTAINER_DESTROY(&container);
