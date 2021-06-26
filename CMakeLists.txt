@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(PAL)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 11)
+
 set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I. -O3 -march=native -std=c++11 -pedantic -Wall -Wextra")
 set(CMAKE_C_COMPILER gcc)

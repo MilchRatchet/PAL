@@ -1,0 +1,6 @@
+#ifndef TEST_CONVEXHULL_H
+#define TEST_CONVEXHULL_H
+
+void TEST_CONVEXHULL_JARVIS();
+
+#endif /* TEST_CONVEXHULL_H */
