@@ -126,7 +126,7 @@ CGL_Convexhull_t CGL_CONVEXHULL_CHAN(CGL_Point_t* points, unsigned int count) {
     return result;
   }
 
-  unsigned int m              = 5;
+  unsigned int m              = (unsigned int) sqrt(count);
   unsigned int number_of_sets = 1 + count / m;
 
   CGL_Convexhull_t* hulls = (CGL_Convexhull_t*) malloc(sizeof(CGL_Convexhull_t) * number_of_sets);
