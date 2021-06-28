@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <SDL2/SDL.h>
 
-enum vll_color_preset {
+typedef enum vll_color_preset {
   VLL_RED,
   VLL_GREEN,
   VLL_BLUE,
@@ -16,26 +16,26 @@ enum vll_color_preset {
   VLL_WHITE,
   VLL_GOLD,
   VLL_PURPLE
-} typedef VLL_Color_Preset_t;
+} VLL_Color_Preset_t;
 
-struct vll_color {
+typedef struct vll_color {
   uint8_t r;
   uint8_t g;
   uint8_t b;
-} typedef VLL_Color_t;
+} VLL_Color_t;
 
-struct vll_point {
+typedef struct vll_point {
   float x;
   float y;
   int radius;
   VLL_Color_t color;
-} typedef VLL_Point_t;
+} VLL_Point_t;
 
-struct vll_line {
+typedef struct vll_line {
   VLL_Point_t a;
   VLL_Point_t b;
   VLL_Color_t color;
-} typedef VLL_Line_t;
+} VLL_Line_t;
 
 VLL_Color_t VLL_UTILS_GETCOLOR(VLL_Color_Preset_t preset);
 VLL_Color_t VLL_UTILS_COLOR(const int code);

@@ -54,7 +54,7 @@ void VLL_SCREEN_UPDATE(VLL_Screen_t* screen) {
   SDL_RenderPresent(screen->renderer);
 }
 
-void VLL_SCREEN_WAITFOREXIT(VLL_Screen_t* screen) {
+void VLL_SCREEN_WAITFOREXIT() {
   int exit = 0;
 
   while (!exit) {
@@ -67,7 +67,7 @@ void VLL_SCREEN_WAITFOREXIT(VLL_Screen_t* screen) {
   }
 }
 
-int VLL_SCREEN_GETUSERVALIDATION(VLL_Screen_t* screen) {
+int VLL_SCREEN_GETUSERVALIDATION() {
   while (1) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {

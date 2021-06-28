@@ -3,14 +3,14 @@
 
 #include "VLL_UTILS.h"
 
-struct vll_container {
+typedef struct vll_container {
   VLL_Point_t* points;
   unsigned int points_count;
   unsigned int points_length;
   VLL_Line_t* lines;
   unsigned int lines_count;
   unsigned int lines_length;
-} typedef VLL_Container_t;
+} VLL_Container_t;
 
 void VLL_CONTAINER_INIT(VLL_Container_t* container);
 void VLL_CONTAINER_ADDPOINT(VLL_Container_t* container, VLL_Point_t point);

@@ -3,10 +3,10 @@
 
 #include "CGL_UTILS.h"
 
-struct cgl_convexhull {
+typedef struct cgl_convexhull {
   unsigned int* points;
   unsigned int count;
-} typedef CGL_Convexhull_t;
+} CGL_Convexhull_t;
 
 void CGL_CONVEXHULL_FREE(CGL_Convexhull_t* hull);
 CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count);
