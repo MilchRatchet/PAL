@@ -87,7 +87,7 @@ void VLL_SCREEN_DESTROY(VLL_Screen_t* screen) {
   if (!screen)
     return;
 
-  SDL_DestroyWindow(screen->window);
   SDL_DestroyRenderer(screen->renderer);
+  SDL_DestroyWindow(screen->window);
   SDL_Quit();
 }

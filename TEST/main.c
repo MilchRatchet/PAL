@@ -7,6 +7,7 @@
  */
 int main() {
   TEST_CONVEXHULL_JARVIS();
+  TEST_CONVEXHULL_CHAN();
   TEST_setcover();
   return 0;
 }
