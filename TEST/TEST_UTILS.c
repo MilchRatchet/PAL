@@ -1,6 +1,12 @@
 #include <stdio.h>
 #include "TEST_UTILS.h"
 
+void TEST_PRINT_START() {
+  printf(
+    "PAL Test Procedure\nTesting the following libraries: AAL CGL VLL\nTests with graphical output need to marked as "
+    "PASSED by pressing Y. Else press N.\n");
+}
+
 void TEST_PRINT_RESULT(int success, char* str) {
   TEST_PRINT_CLEAR();
 

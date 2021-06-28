@@ -1,6 +1,7 @@
 #ifndef TEST_UTILS_H
 #define TEST_UTILS_H
 
+void TEST_PRINT_START();
 void TEST_PRINT_RESULT(int success, char* str);
 void TEST_PRINT_INPROGRESS(char* str);
 void TEST_PRINT_GREEN(char* str);
