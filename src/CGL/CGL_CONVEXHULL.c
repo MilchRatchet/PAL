@@ -23,7 +23,7 @@ void CGL_CONVEXHULL_FREE(CGL_Convexhull_t* hull) {
  *
  * WARNING: May fail when more than 2 points are collinear.
  */
-CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) {
+CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, const unsigned int count) {
   CGL_Convexhull_t err_result = {.points = 0, .count = -1};
   if (!points)
     return err_result;
@@ -51,9 +51,6 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) 
       first = i;
     }
   }
-
-  if (first >= count)
-    return err_result;
 
   unsigned int point_on_hull = first;
   unsigned int last          = -1;
@@ -112,7 +109,7 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, unsigned int count) 
  *
  * WARNING: May fail when more than 2 points are collinear.
  */
-CGL_Convexhull_t CGL_CONVEXHULL_CHAN(CGL_Point_t* points, unsigned int count) {
+CGL_Convexhull_t CGL_CONVEXHULL_CHAN(CGL_Point_t* points, const unsigned int count) {
   CGL_Convexhull_t err_result = {.points = 0, .count = -1};
   if (!points)
     return err_result;
@@ -126,107 +123,152 @@ CGL_Convexhull_t CGL_CONVEXHULL_CHAN(CGL_Point_t* points, unsigned int count) {
     return result;
   }
 
-  unsigned int m              = (unsigned int) sqrt(count);
-  unsigned int number_of_sets = 1 + count / m;
+  unsigned int m              = sqrt(count);
+  unsigned int number_of_sets = (count + m - 1) / m;
 
   CGL_Convexhull_t* hulls = (CGL_Convexhull_t*) malloc(sizeof(CGL_Convexhull_t) * number_of_sets);
 
-  int first          = 0;
-  float lowest_value = points[0].y;
+  unsigned int first         = 0;
+  unsigned int first_in_hull = 0;
+  float lowest_value         = FLT_MAX;
+  unsigned int first_hull    = 0;
+  unsigned int max_hull_size = 0;
 
   for (unsigned int i = 0; i < number_of_sets; i++) {
-    const int offset      = i * m;
+    const unsigned int offset = i * m;
+
     CGL_Convexhull_t hull = CGL_CONVEXHULL_JARVIS(points + offset, MIN(m, count - offset));
+
+    max_hull_size += hull.count;
+
     for (unsigned int j = 0; j < hull.count; j++) {
-      const int p   = offset + hull.points[j];
-      const float y = points[p].y;
+      const unsigned int p = offset + hull.points[j];
+      const float y        = points[p].y;
 
       if (y < lowest_value) {
-        lowest_value = y;
-        first        = p;
+        lowest_value  = y;
+        first         = p;
+        first_in_hull = j;
+        first_hull    = i;
       }
     }
+
     hulls[i] = hull;
   }
 
   CGL_Convexhull_t result;
-  result.count     = 1;
-  result.points    = (unsigned int*) malloc(sizeof(unsigned int) * count);
-  result.points[0] = first;
+  result.count  = 0;
+  result.points = (unsigned int*) malloc(sizeof(unsigned int) * max_hull_size);
 
-  CGL_Point_t start = points[first];
-  int* candidates   = (int*) malloc(sizeof(int) * number_of_sets);
+  unsigned int point_index         = first;
+  unsigned int point_in_hull_index = first_in_hull;
+  CGL_Point_t point_on_hull        = points[first];
+  unsigned int hull_of_point       = first_hull;
 
-  // For each set we determine the best candidate to be the next point
-  for (unsigned int i = 0; i < number_of_sets; i++) {
-    const int offset            = i * m;
-    CGL_Convexhull_t hull       = hulls[i];
-    int candidate               = 0;
-    int candidate_index         = offset + hull.points[0];
-    CGL_Point_t candidate_point = points[candidate_index];
-    for (unsigned int j = 1; j < hull.count; j++) {
-      const int index = offset + hull.points[j];
-      CGL_Point_t p   = points[index];
-      if (CGL_UTILS_ORIENTATION(start, candidate_point, p) == -1 || candidate_index == first) {
-        candidate       = j;
-        candidate_index = index;
-        candidate_point = p;
-      }
-    }
+  while (result.count < max_hull_size) {
+    result.points[result.count++] = point_index;
 
-    candidates[i] = candidate;
-  }
+    unsigned int chosen_index         = point_index;
+    unsigned int chosen_in_hull_index = point_in_hull_index;
+    CGL_Point_t chosen_point          = points[chosen_index];
+    unsigned int chosen_hull          = hull_of_point;
 
-  int last            = -1;
-  CGL_Point_t current = start;
-
-  while (first != last) {
-    last                     = hulls[0].points[candidates[0]];
-    CGL_Point_t end          = points[last];
-    int chosen_candidate_set = 0;
-
-    // We iterate through the candidates and determine the actual next point
-    for (unsigned int i = 1; i < number_of_sets; i++) {
-      const int candidate_index = candidates[i];
-      const int index           = i * m + hulls[i].points[candidate_index];
-      CGL_Point_t next_point    = points[index];
-      if (CGL_UTILS_ORIENTATION(current, end, next_point) == -1) {
-        end                  = next_point;
-        last                 = index;
-        chosen_candidate_set = i;
-      }
-    }
-
-    result.points[result.count++]    = last;
-    current                          = end;
-    candidates[chosen_candidate_set] = (candidates[chosen_candidate_set] + 1) % hulls[chosen_candidate_set].count;
-
-    // Now we update the candidates
     for (unsigned int i = 0; i < number_of_sets; i++) {
-      const int offset          = i * m;
-      CGL_Convexhull_t hull     = hulls[i];
-      int index                 = candidates[i];
-      CGL_Point_t new_candidate = points[offset + hull.points[index]];
+      const unsigned int offset = i * m;
 
-      for (unsigned int j = 1; j < hull.count; j++) {
-        const int index_p = (index + j) % hull.count;
+      CGL_Convexhull_t hull = hulls[i];
 
-        CGL_Point_t p = points[offset + hull.points[index_p]];
+      if (hull.count <= 4) {
+        for (unsigned int j = 0; j < hull.count; j++) {
+          const unsigned int index = offset + hull.points[j];
+          const CGL_Point_t p      = points[index];
+          if (CGL_UTILS_ORIENTATION(point_on_hull, chosen_point, p) == -1 || point_index == chosen_index) {
+            chosen_index         = index;
+            chosen_point         = p;
+            chosen_in_hull_index = j;
+            chosen_hull          = i;
+          }
+        }
+      }
+      else {
+        unsigned int step_size = hull.count / 3;
 
-        if (CGL_UTILS_ORIENTATION(current, new_candidate, p) == -1) {
-          new_candidate = p;
-          index         = index_p;
+        unsigned int local_optimal_hull_index = 0;
+        unsigned int local_optimal_index      = offset + hull.points[local_optimal_hull_index];
+        CGL_Point_t local_optimal_point       = points[local_optimal_index];
+
+        if (i == hull_of_point) {
+          local_optimal_hull_index = (point_in_hull_index + 1) % hull.count;
+          local_optimal_index      = offset + hull.points[local_optimal_hull_index];
+          local_optimal_point      = points[local_optimal_index];
         }
         else {
-          break;
+          for (int j = 1; j < 4; j++) {
+            if (j * step_size >= hull.count)
+              break;
+
+            const unsigned int index = offset + hull.points[j * step_size];
+            const CGL_Point_t p      = points[index];
+            if (
+              CGL_UTILS_ORIENTATION(point_on_hull, local_optimal_point, p) == -1
+              || point_index == local_optimal_index) {
+              local_optimal_hull_index = j * step_size;
+              local_optimal_index      = index;
+              local_optimal_point      = p;
+            }
+          }
+
+          step_size = hull.count / 4;
+
+          while (step_size) {
+            unsigned int h1 = (local_optimal_hull_index + step_size) % hull.count;
+            unsigned int h2 = local_optimal_hull_index;
+
+            h2 += (h2 < step_size) ? hull.count : 0;
+            h2 -= step_size;
+
+            const unsigned int c1 = offset + hull.points[h1];
+            const unsigned int c2 = offset + hull.points[h2];
+
+            const CGL_Point_t p1 = points[c1];
+            const CGL_Point_t p2 = points[c2];
+
+            if (CGL_UTILS_ORIENTATION(point_on_hull, local_optimal_point, p1) == -1) {
+              local_optimal_hull_index = h1;
+              local_optimal_index      = c1;
+              local_optimal_point      = p1;
+            }
+
+            if (CGL_UTILS_ORIENTATION(point_on_hull, local_optimal_point, p2) == -1) {
+              local_optimal_hull_index = h2;
+              local_optimal_index      = c2;
+              local_optimal_point      = p2;
+            }
+
+            step_size = step_size >> 1;
+          }
+        }
+
+        if (
+          CGL_UTILS_ORIENTATION(point_on_hull, chosen_point, local_optimal_point) == -1
+          || point_index == chosen_index) {
+          chosen_index         = local_optimal_index;
+          chosen_point         = local_optimal_point;
+          chosen_in_hull_index = local_optimal_hull_index;
+          chosen_hull          = i;
         }
       }
-
-      candidates[i] = index;
     }
+
+    point_on_hull       = chosen_point;
+    point_index         = chosen_index;
+    point_in_hull_index = chosen_in_hull_index;
+    hull_of_point       = chosen_hull;
+
+    if (point_index == first)
+      break;
   }
 
-  free(candidates);
   for (unsigned int i = 0; i < number_of_sets; i++) {
     CGL_CONVEXHULL_FREE(&hulls[i]);
   }
