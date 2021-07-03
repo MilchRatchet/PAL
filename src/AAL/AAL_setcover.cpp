@@ -55,7 +55,7 @@ static void remove(std::vector<T>& vec1, const std::vector<T>& vec2) {
   }
 }
 
-extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance& instance) {
+extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
   // rewrite the data in a more comftable vector datastructure
   std::vector<std::vector<int>> remainingSets(instance.numberOfSubsets);
   std::vector<int> remainingObjects(instance.totalSetSize);

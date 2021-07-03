@@ -54,11 +54,40 @@ void VLL_SCREEN_UPDATE(VLL_Screen_t* screen) {
   SDL_RenderPresent(screen->renderer);
 }
 
+void VLL_SCREEN_WAITFOREXIT() {
+  int exit = 0;
+
+  while (!exit) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        exit = 1;
+      }
+    }
+  }
+}
+
+int VLL_SCREEN_GETUSERVALIDATION() {
+  while (1) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_KEYDOWN) {
+        if (event.key.keysym.sym == SDLK_y) {
+          return 1;
+        }
+        if (event.key.keysym.sym == SDLK_n) {
+          return 0;
+        }
+      }
+    }
+  }
+}
+
 void VLL_SCREEN_DESTROY(VLL_Screen_t* screen) {
   if (!screen)
     return;
 
-  SDL_DestroyWindow(screen->window);
   SDL_DestroyRenderer(screen->renderer);
+  SDL_DestroyWindow(screen->window);
   SDL_Quit();
 }

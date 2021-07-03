@@ -1,7 +1,12 @@
-#include <string>
-void print_lightgreen(const std::string word);
-void print_lightred(const std::string word);
-void print_yellow(const std::string word);
+#ifndef TEST_UTILS_H
+#define TEST_UTILS_H
 
-void print_check(const bool b, const std::string& str);
-bool compareAryInt(const int* a, const unsigned int size_a, const int* b, const unsigned int size_b);
+void TEST_PRINT_START();
+void TEST_PRINT_RESULT(int success, char* str);
+void TEST_PRINT_INPROGRESS(char* str);
+void TEST_PRINT_GREEN(char* str);
+void TEST_PRINT_RED(char* str);
+void TEST_PRINT_YELLOW(char* str);
+void TEST_PRINT_CLEAR();
+
+#endif /* TEST_UTILS_H */

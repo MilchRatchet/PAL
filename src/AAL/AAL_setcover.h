@@ -1,22 +1,22 @@
 #pragma once
 
-struct setcoverInstance {
+typedef struct setcoverInstance {
   int* totalSet;
   unsigned int totalSetSize;
   int* subsets;
   unsigned int* subsetSizes;
   unsigned int numberOfSubsets;
   float* weights;
-};
+} AAL_setcoverInstance;
 
-struct setcoverResult {
+typedef struct setcoverResult {
   int* subsets;
   unsigned int numberOfSubsets;
   float objectiveValue;
-};
+} AAL_setcoverResult;
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 /*!
@@ -25,8 +25,8 @@ struct setcoverResult {
  * \param instance.subsetSizes is used to seperate the subsets
  * \details weights have to be stricly positive
  */
-setcoverResult AAL_setcover_greedy(setcoverInstance &instance);
+AAL_setcoverResult AAL_setcover_greedy(AAL_setcoverInstance instance);
 
 #ifdef __cplusplus
-  }
+}
 #endif

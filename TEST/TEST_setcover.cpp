@@ -3,7 +3,7 @@
 #include <fstream>
 
 #include "AAL_setcover.h"
-#include "TEST_UTILS.h"
+#include "TEST_UTILS.hpp"
 
 extern "C" void TEST_setcover() {
   int* totalSet                = (int*) malloc(sizeof(int) * 8);
@@ -54,8 +54,9 @@ extern "C" void TEST_setcover() {
   // run the greedy setcover algorithm
   setcoverResult result = AAL_setcover_greedy(instance);
 
-  print_check(result.objectiveValue == 10, "Objective value");
-  print_check(compareAryInt(result.subsets, result.numberOfSubsets, subsets_cmp, 4), "subsets");
+  print_check(
+    result.objectiveValue == 10 && compareAryInt(result.subsets, result.numberOfSubsets, subsets_cmp, 4),
+    "AAL_SETCOVER_GREEDY");
 
   free(totalSet);
   free(instance.subsets);
