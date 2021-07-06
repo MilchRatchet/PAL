@@ -99,7 +99,7 @@ extern "C" setcoverResult AAL_setcover_greedy(setcoverInstance instance) {
   // convert result to the output struct
   unsigned int numberOfSubsets = choosenSets.size();
   int* subsets                 = (int*) malloc(sizeof(int) * numberOfSubsets);
-  float objectiveValue         = 0;
+  float objectiveValue         = 0.0f;
   setcoverResult result{subsets, numberOfSubsets, objectiveValue};
   for (size_t i = 0; i < choosenSets.size(); ++i) {
     result.subsets[i] = choosenSets[i];

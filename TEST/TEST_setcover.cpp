@@ -19,7 +19,7 @@ extern "C" void TEST_setcover() {
 
   for (size_t i = 0; i < numberOfSubsets; ++i) {
     subsetSizes[i] = 3;
-    weights[i]     = i + 1;
+    weights[i]     = i + 1.0f;
   }
 
   // the middle vertex has degree 4
@@ -55,7 +55,7 @@ extern "C" void TEST_setcover() {
   setcoverResult result = AAL_setcover_greedy(instance);
 
   print_check(
-    result.objectiveValue == 10 && compareAryInt(result.subsets, result.numberOfSubsets, subsets_cmp, 4),
+    result.objectiveValue == 10.0f && compareAryInt(result.subsets, result.numberOfSubsets, subsets_cmp, 4),
     "AAL_SETCOVER_GREEDY");
 
   free(totalSet);

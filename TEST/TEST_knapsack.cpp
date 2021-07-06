@@ -11,25 +11,25 @@ void TEST_knapsack() {
   float* itemSizes                 = (float*) malloc(numberOfItems * sizeof(float));
   float* itemValues                = (float*) malloc(numberOfItems * sizeof(float));
 
-  itemSizes[0] = 2.4;
-  itemSizes[1] = 0.6;
-  itemSizes[2] = 9.2;
-  itemSizes[3] = 5.2;
-  itemSizes[4] = 1.4;
-  itemSizes[5] = 5.9;
-  itemSizes[6] = 3.6;
-  itemSizes[7] = 0.0;
+  itemSizes[0] = 2.4f;
+  itemSizes[1] = 0.6f;
+  itemSizes[2] = 9.2f;
+  itemSizes[3] = 5.2f;
+  itemSizes[4] = 1.4f;
+  itemSizes[5] = 5.9f;
+  itemSizes[6] = 3.6f;
+  itemSizes[7] = 0.0f;
 
-  itemValues[0] = 1.7;
-  itemValues[1] = 0.4;
-  itemValues[2] = 2.2;
-  itemValues[3] = 4.4;
-  itemValues[4] = 0.9;
-  itemValues[5] = 6.0;
-  itemValues[6] = 2.1;
-  itemValues[7] = 5.4;
+  itemValues[0] = 1.7f;
+  itemValues[1] = 0.4f;
+  itemValues[2] = 2.2f;
+  itemValues[3] = 4.4f;
+  itemValues[4] = 0.9f;
+  itemValues[5] = 6.0f;
+  itemValues[6] = 2.1f;
+  itemValues[7] = 5.4f;
 
-  const float capacity = 8.8;
+  const float capacity = 8.8f;
 
   AAL_knapsackInstance instance{itemSizes, itemValues, numberOfItems, capacity};
   AAL_knapsackResult result = AAL_knapsack_exact(instance);
@@ -40,7 +40,7 @@ void TEST_knapsack() {
   subset[2]            = 7;
 
   print_check(
-    std::abs(result.objectiveValue - 13.1) < 0.00001 && compareAryUInt(result.items, result.numberOfItems, subset, 3),
+    std::abs(result.objectiveValue - 13.1f) < 0.00001f && compareAryUInt(result.items, result.numberOfItems, subset, 3),
     "AAL_KNAPSACK_EXACT");
 
   free(instance.itemSizes);

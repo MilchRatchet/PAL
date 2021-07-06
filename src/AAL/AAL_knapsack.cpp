@@ -11,8 +11,8 @@ private:
 
 public:
   Subset() {
-    p_size  = 0;
-    p_value = 0;
+    p_size  = 0.0f;
+    p_value = 0.0f;
     p_set.resize(0);
   }
   void addItem(const float size, const float value, const unsigned int item) {
@@ -56,7 +56,7 @@ AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
     }
     std::sort(subsets.begin(), subsets.end(), [](Subset a, Subset b) { return a.size() < b.size(); });
     // remove all dominated items
-    float max_value = -1;
+    float max_value = -1.0f;
     for (unsigned int j = 0; j < subsets.size(); ++j) {
       if (subsets[j].value() <= max_value) {
         subsets.erase(subsets.begin() + j);
