@@ -1,11 +1,11 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
-void TEST_knapsack();
+void TEST_KNAPSACK_EXACT();
 
 #ifdef __cplusplus
-  }
+}
 #endif

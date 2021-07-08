@@ -6,7 +6,7 @@
 #include "AAL_knapsack.h"
 #include "TEST_UTILS.hpp"
 
-void TEST_knapsack() {
+void TEST_KNAPSACK_EXACT() {
   const unsigned int numberOfItems = 8;
   float* itemSizes                 = (float*) malloc(numberOfItems * sizeof(float));
   float* itemValues                = (float*) malloc(numberOfItems * sizeof(float));

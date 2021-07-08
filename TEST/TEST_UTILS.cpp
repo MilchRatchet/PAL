@@ -1,5 +1,11 @@
+#include "TEST_UTILS.hpp"
+
 #include <iostream>
 #include <string>
+
+/*
+ * output functions
+ */
 
 void print_lightgreen(const std::string word) {
   std::cout << "\033[1;32m";
@@ -28,6 +34,10 @@ void print_check(const bool b, const std::string& str) {
   }
   std::cout << " " << str << "\n";
 }
+
+/*
+ * compare arrays
+ */
 
 bool compareAryInt(const int* a, const unsigned int size_a, const int* b, const unsigned int size_b) {
   if (size_a != size_b) {
