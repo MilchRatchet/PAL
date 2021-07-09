@@ -26,10 +26,10 @@ void select_tests(int argc, char** argv) {
     std::cout << "Below you can find a list of available abbreviations:\n";
     std::cout << "Abbreviation | Library | Algorithm\n";
     std::cout << "-------------|---------|-------------------\n";
-    std::cout << "CHJ          |   CGL   | convex hull jarvis\n";
-    std::cout << "CHC          |   CGL   | convex hull chan\n";
-    std::cout << "SCG          |   AAL   | setcover greedy\n";
-    std::cout << "KSE          |   AAL   | knapsack exact\n";
+    std::cout << "     KSE     |   AAL   | knapsack exact\n";
+    std::cout << "     SCG     |   AAL   | setcover greedy\n";
+    std::cout << "     CHC     |   CGL   | convex hull chan\n";
+    std::cout << "     CHJ     |   CGL   | convex hull jarvis\n";
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("CHJ") != 0) {
     TEST_CONVEXHULL_JARVIS();
