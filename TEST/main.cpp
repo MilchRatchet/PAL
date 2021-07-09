@@ -16,7 +16,7 @@ void select_tests(int argc, char** argv) {
   for (int i = 1; i < argc; ++i) {
     testset.insert({std::string(argv[i])});
   }
-  if (testset.count("HELP") != 0) {
+  if (testset.count("HELP") != 0 || argc == 1) {
     std::cout << "Helppage\n========\n";
     std::cout << "Pass argument <FULL> to test all algorithms.\n";
     std::cout << "Pass argument <AAL> to test all algorithms from the approximation algorithm library.\n";
