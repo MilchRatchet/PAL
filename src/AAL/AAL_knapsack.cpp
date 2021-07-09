@@ -1,6 +1,7 @@
 #include "AAL_knapsack.h"
 
 #include <algorithm>
+#include <tuple>
 #include <vector>
 
 class Subset {
@@ -41,33 +42,40 @@ public:
 AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
   Subset emptyset = Subset();
   std::vector<Subset> subsets{emptyset};
+  std::vector<std::tuple<unsigned int, float>> indexes = {std::tuple<unsigned int, float>(0, 0.0f)};
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
-    const unsigned int subsetsSize = subsets.size();
-    for (unsigned int j = 0; j < subsetsSize; ++j) {
+    const unsigned int indexesSize = indexes.size();
+    for (unsigned int j = 0; j < indexesSize; ++j) {
       // if there is enough space left add the item
-      if (subsets[j].size() + instance.itemSizes[i] <= instance.capacity) {
-        Subset newSubset = subsets[j];
+      if (subsets[std::get<0>(indexes[j])].size() + instance.itemSizes[i] <= instance.capacity) {
+        Subset newSubset = subsets[std::get<0>(indexes[j])];
         newSubset.addItem(instance.itemSizes[i], instance.itemValues[i], i);
         subsets.push_back(newSubset);
+        indexes.push_back(
+          std::tuple<unsigned int, float>(subsets.size() - 1, std::get<1>(indexes[j]) + instance.itemSizes[i]));
       }
       else {
         break;
       }
     }
-    std::sort(subsets.begin(), subsets.end(), [](Subset a, Subset b) { return a.size() < b.size(); });
+    std::sort(
+      indexes.begin(), indexes.end(),
+      [](const std::tuple<unsigned int, float> a, const std::tuple<unsigned int, float> b) {
+        return std::get<1>(a) < std::get<1>(b);
+      });
     // remove all dominated items
     float max_value = -1.0f;
-    for (unsigned int j = 0; j < subsets.size(); ++j) {
-      if (subsets[j].value() <= max_value) {
-        subsets.erase(subsets.begin() + j);
+    for (unsigned int j = 0; j < indexes.size(); ++j) {
+      if (subsets[std::get<0>(indexes[j])].value() <= max_value) {
+        indexes.erase(indexes.begin() + j);
         --j;
       }
       else {
-        max_value = subsets[j].value();
+        max_value = subsets[std::get<0>(indexes[j])].value();
       }
     }
   }
-  const Subset bestSubset    = subsets[subsets.size() - 1];
+  const Subset bestSubset    = subsets[std::get<0>(indexes[indexes.size() - 1])];
   unsigned int numberOfItems = bestSubset.numElements();
   unsigned int* items        = (unsigned int*) malloc(numberOfItems * sizeof(unsigned int));
   for (unsigned int i = 0; i < numberOfItems; ++i) {
