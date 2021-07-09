@@ -1,11 +1,11 @@
 #pragma once
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
-void TEST_setcover();
+void TEST_SETCOVER_GREEDY();
 
 #ifdef __cplusplus
-  }
+}
 #endif

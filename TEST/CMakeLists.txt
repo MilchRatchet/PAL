@@ -2,7 +2,8 @@ file(GLOB SOURCES
     "*.cpp"
     "*.c")
 file(GLOB HEADERS
-    "*.h")
+    "*.h"
+    "*.hpp")
 
 add_executable(TEST ${SOURCES} ${HEADERS})
 target_include_directories(TEST PUBLIC ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

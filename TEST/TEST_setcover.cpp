@@ -5,7 +5,7 @@
 #include "AAL_setcover.h"
 #include "TEST_UTILS.hpp"
 
-extern "C" void TEST_setcover() {
+extern "C" void TEST_SETCOVER_GREEDY() {
   int* totalSet                = (int*) malloc(sizeof(int) * 8);
   unsigned int totalSetSize    = 8;
   int* subsets                 = (int*) malloc(sizeof(int) * 16);
