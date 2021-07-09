@@ -1,7 +1,10 @@
 #include "TEST_knapsack.h"
 
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
+#include <iostream>
+#include <random>
 
 #include "AAL_knapsack.h"
 #include "TEST_UTILS.hpp"
@@ -47,4 +50,30 @@ void TEST_KNAPSACK_EXACT() {
   free(instance.itemValues);
   free(result.items);
   free(subset);
+}
+
+void TEST_KNAPSACK_PERFORMANCE() {
+  const unsigned int numberOfItems = 200;
+  float* itemSizes                 = (float*) malloc(numberOfItems * sizeof(float));
+  float* itemValues                = (float*) malloc(numberOfItems * sizeof(float));
+
+  std::default_random_engine generator;
+  std::uniform_real_distribution<float> distribution(0.0f, 10.0f);
+
+  for (unsigned int i = 0; i < numberOfItems; ++i) {
+    itemSizes[i] = distribution(generator);
+  }
+  for (unsigned int i = 0; i < numberOfItems; ++i) {
+    itemValues[i] = distribution(generator);
+  }
+
+  const float capacity = 5 * numberOfItems;
+
+  AAL_knapsackInstance instance{itemSizes, itemValues, numberOfItems, capacity};
+  auto start                = std::chrono::high_resolution_clock::now();
+  AAL_knapsackResult result = AAL_knapsack_exact(instance);
+  auto end                  = std::chrono::high_resolution_clock::now();
+  auto duration             = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+  std::cout << "timeconsumption: " << duration.count() << "\n";
+  std::cout << "result: " << result.objectiveValue << "\n";
 }

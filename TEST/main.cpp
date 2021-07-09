@@ -27,6 +27,7 @@ void select_tests(int argc, char** argv) {
     std::cout << "Abbreviation | Library | Algorithm\n";
     std::cout << "-------------|---------|-------------------\n";
     std::cout << "     KSE     |   AAL   | knapsack exact\n";
+    std::cout << "     KSP     |   AAL   | knapsack performance\n";
     std::cout << "     SCG     |   AAL   | setcover greedy\n";
     std::cout << "     CHC     |   CGL   | convex hull chan\n";
     std::cout << "     CHJ     |   CGL   | convex hull jarvis\n";
@@ -42,6 +43,9 @@ void select_tests(int argc, char** argv) {
   }
   if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0) {
     TEST_KNAPSACK_EXACT();
+  }
+  if (testset.count("KSP") != 0) {
+    TEST_KNAPSACK_PERFORMANCE();
   }
 }
 
