@@ -87,7 +87,7 @@ AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
   return result;
 }
 
-AAL_knapsackResult AAL_knapsack_fptas(AAL_knapsackInstance instance, const float eps) {
+AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const float eps) {
   // check there is no access to non existing data
   if (instance.numberOfItems == 0) {
     throw std::runtime_error("AAL_knapsack_fptas can't handle empty instances.\n");
@@ -101,8 +101,20 @@ AAL_knapsackResult AAL_knapsack_fptas(AAL_knapsackInstance instance, const float
   }
   mu *= eps / instance.numberOfItems;
   // round the values
+  float* roundedItemValues = (float*) malloc(instance.numberOfItems * sizeof(float));
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
-    instance.itemValues[i] = std::floor(instance.itemValues[i] / mu) * mu;
+    roundedItemValues[i] = std::floor(instance.itemValues[i] / mu) * mu;
   }
-  return AAL_knapsack_exact(instance);
+  AAL_knapsackInstance roundedInstance{
+    instance.itemSizes, roundedItemValues, instance.numberOfItems, instance.capacity};
+  // invoke the exact knapsack on the rounded data
+  AAL_knapsackResult result = AAL_knapsack_exact(roundedInstance);
+  free(roundedItemValues);
+  // retranslate the solution on the rounded data to the original data
+  float objectiveValue = 0;
+  for (unsigned int i = 0; i < result.numberOfItems; ++i) {
+    objectiveValue += instance.itemValues[result.items[i]];
+  }
+  result.objectiveValue = objectiveValue;
+  return result;
 }

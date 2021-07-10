@@ -31,7 +31,7 @@ AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance);
  * \param eps factor for the approximation guarantee, objective value will be at least (1 - eps) OPT
  * \return objective value returned by the exact algorithm on the rounded data
  */
-AAL_knapsackResult AAL_knapsack_fptas(AAL_knapsackInstance instance, const float eps);
+AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const float eps);
 
 #ifdef __cplusplus
 }

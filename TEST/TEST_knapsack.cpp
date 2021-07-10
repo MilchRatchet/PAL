@@ -55,7 +55,7 @@ void TEST_KNAPSACK(std::set<std::string> testset) {
     AAL_knapsackResult result = AAL_knapsack_fptas(instance, eps);
 
     print_check(
-      result.objectiveValue >= 13.1f * (1 - eps) && result.objectiveValue <= 13.1f
+      result.objectiveValue >= 13.1f * (1 - eps) - 0.00001f && result.objectiveValue <= 13.1f + 0.00001f
         && compareAryUInt(result.items, result.numberOfItems, subset, 3),
       "AAL_KNAPSACK_FPTAS");
     free(result.items);
