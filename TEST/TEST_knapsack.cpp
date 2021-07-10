@@ -40,7 +40,7 @@ void TEST_KNAPSACK(std::set<std::string> testset) {
   subset[1]            = 5;
   subset[2]            = 7;
 
-  if (testset.count("KSE") != 0) {
+  if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0) {
     AAL_knapsackResult result = AAL_knapsack_exact(instance);
 
     print_check(
@@ -50,7 +50,7 @@ void TEST_KNAPSACK(std::set<std::string> testset) {
 
     free(result.items);
   }
-  if (testset.count("KSF") != 0) {
+  if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSF") != 0) {
     const float eps           = 0.1;
     AAL_knapsackResult result = AAL_knapsack_fptas(instance, eps);
 
