@@ -111,7 +111,7 @@ AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const
   AAL_knapsackResult result = AAL_knapsack_exact(roundedInstance);
   free(roundedItemValues);
   // retranslate the solution on the rounded data to the original data
-  float objectiveValue = 0;
+  float objectiveValue = 0.0f;
   for (unsigned int i = 0; i < result.numberOfItems; ++i) {
     objectiveValue += instance.itemValues[result.items[i]];
   }
