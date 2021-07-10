@@ -95,7 +95,7 @@ AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const
   // compute \mu
   float mu = instance.itemValues[0];
   for (unsigned int i = 1; i < instance.numberOfItems; ++i) {
-    if (instance.itemValues[i] > mu) {
+    if (instance.itemValues[i] > mu && instance.itemValues[i] <= instance.capacity) {
       mu = instance.itemValues[i];
     }
   }
