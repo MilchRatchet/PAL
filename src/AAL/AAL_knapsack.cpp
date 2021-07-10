@@ -1,6 +1,8 @@
 #include "AAL_knapsack.h"
 
 #include <algorithm>
+#include <cmath>
+#include <exception>
 #include <tuple>
 #include <vector>
 
@@ -39,8 +41,8 @@ public:
   }
 };
 
-AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
-  Subset emptyset = Subset();
+AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
+  const Subset emptyset = Subset();
   std::vector<Subset> subsets{emptyset};
   std::vector<std::tuple<unsigned int, float>> indexes = {std::tuple<unsigned int, float>(0, 0.0f)};
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
@@ -83,4 +85,24 @@ AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
   }
   AAL_knapsackResult result{items, numberOfItems, bestSubset.value()};
   return result;
+}
+
+AAL_knapsackResult AAL_knapsack_fptas(AAL_knapsackInstance instance, const float eps) {
+  // check there is no access to non existing data
+  if (instance.numberOfItems == 0) {
+    throw std::runtime_error("AAL_knapsack_fptas can't handle empty instances.\n");
+  }
+  // compute \mu
+  float mu = instance.itemValues[0];
+  for (unsigned int i = 1; i < instance.numberOfItems; ++i) {
+    if (instance.itemValues[i] > mu) {
+      mu = instance.itemValues[i];
+    }
+  }
+  mu *= eps / instance.numberOfItems;
+  // round the values
+  for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
+    instance.itemValues[i] = std::floor(instance.itemValues[i] / mu) * mu;
+  }
+  return AAL_knapsack_exact(instance);
 }

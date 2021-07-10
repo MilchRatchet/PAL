@@ -2,11 +2,13 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <set>
+#include <string>
 
 #include "AAL_knapsack.h"
 #include "TEST_UTILS.hpp"
 
-void TEST_KNAPSACK_EXACT() {
+void TEST_KNAPSACK(std::set<std::string> testset) {
   const unsigned int numberOfItems = 8;
   float* itemSizes                 = (float*) malloc(numberOfItems * sizeof(float));
   float* itemValues                = (float*) malloc(numberOfItems * sizeof(float));
@@ -32,19 +34,34 @@ void TEST_KNAPSACK_EXACT() {
   const float capacity = 8.8f;
 
   AAL_knapsackInstance instance{itemSizes, itemValues, numberOfItems, capacity};
-  AAL_knapsackResult result = AAL_knapsack_exact(instance);
 
   unsigned int* subset = (unsigned int*) malloc(3 * sizeof(unsigned int));
   subset[0]            = 0;
   subset[1]            = 5;
   subset[2]            = 7;
 
-  print_check(
-    std::abs(result.objectiveValue - 13.1f) < 0.00001f && compareAryUInt(result.items, result.numberOfItems, subset, 3),
-    "AAL_KNAPSACK_EXACT");
+  if (testset.count("KSE") != 0) {
+    AAL_knapsackResult result = AAL_knapsack_exact(instance);
+
+    print_check(
+      std::abs(result.objectiveValue - 13.1f) < 0.00001f
+        && compareAryUInt(result.items, result.numberOfItems, subset, 3),
+      "AAL_KNAPSACK_EXACT");
+
+    free(result.items);
+  }
+  if (testset.count("KSF") != 0) {
+    const float eps           = 0.1;
+    AAL_knapsackResult result = AAL_knapsack_fptas(instance, eps);
+
+    print_check(
+      result.objectiveValue >= 13.1f * (1 - eps) && result.objectiveValue <= 13.1f
+        && compareAryUInt(result.items, result.numberOfItems, subset, 3),
+      "AAL_KNAPSACK_FPTAS");
+    free(result.items);
+  }
 
   free(instance.itemSizes);
   free(instance.itemValues);
-  free(result.items);
   free(subset);
 }
