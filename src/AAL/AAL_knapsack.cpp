@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include <exception>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
