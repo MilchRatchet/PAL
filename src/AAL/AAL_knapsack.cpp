@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
-#include <tuple>
+#include <utility>
 #include <vector>
 
 class Subset {
@@ -44,7 +44,7 @@ public:
 AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
   const Subset emptyset = Subset();
   std::vector<Subset> subsets{emptyset};
-  std::vector<std::tuple<unsigned int, float>> indexes = {std::tuple<unsigned int, float>(0, 0.0f)};
+  std::vector<std::pair<unsigned int, float>> indexes = {std::pair<unsigned int, float>(0, 0.0f)};
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
     const unsigned int indexesSize = indexes.size();
     for (unsigned int j = 0; j < indexesSize; ++j) {
@@ -54,7 +54,7 @@ AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
         newSubset.addItem(instance.itemSizes[i], instance.itemValues[i], i);
         subsets.push_back(newSubset);
         indexes.push_back(
-          std::tuple<unsigned int, float>(subsets.size() - 1, std::get<1>(indexes[j]) + instance.itemSizes[i]));
+          std::pair<unsigned int, float>(subsets.size() - 1, std::get<1>(indexes[j]) + instance.itemSizes[i]));
       }
       else {
         break;
@@ -62,7 +62,7 @@ AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
     }
     std::sort(
       indexes.begin(), indexes.end(),
-      [](const std::tuple<unsigned int, float> a, const std::tuple<unsigned int, float> b) {
+      [](const std::pair<unsigned int, float> a, const std::pair<unsigned int, float> b) {
         return std::get<1>(a) < std::get<1>(b);
       });
     // remove all dominated items
