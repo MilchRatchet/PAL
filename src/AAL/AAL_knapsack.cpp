@@ -1,7 +1,9 @@
 #include "AAL_knapsack.h"
 
 #include <algorithm>
-#include <tuple>
+#include <cmath>
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
 class Subset {
@@ -39,10 +41,10 @@ public:
   }
 };
 
-AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
-  Subset emptyset = Subset();
+AAL_knapsackResult AAL_knapsack_exact(const AAL_knapsackInstance instance) {
+  const Subset emptyset = Subset();
   std::vector<Subset> subsets{emptyset};
-  std::vector<std::tuple<unsigned int, float>> indexes = {std::tuple<unsigned int, float>(0, 0.0f)};
+  std::vector<std::pair<unsigned int, float>> indexes = {std::pair<unsigned int, float>(0, 0.0f)};
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
     const unsigned int indexesSize = indexes.size();
     for (unsigned int j = 0; j < indexesSize; ++j) {
@@ -52,7 +54,7 @@ AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
         newSubset.addItem(instance.itemSizes[i], instance.itemValues[i], i);
         subsets.push_back(newSubset);
         indexes.push_back(
-          std::tuple<unsigned int, float>(subsets.size() - 1, std::get<1>(indexes[j]) + instance.itemSizes[i]));
+          std::pair<unsigned int, float>(subsets.size() - 1, std::get<1>(indexes[j]) + instance.itemSizes[i]));
       }
       else {
         break;
@@ -60,7 +62,7 @@ AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
     }
     std::sort(
       indexes.begin(), indexes.end(),
-      [](const std::tuple<unsigned int, float> a, const std::tuple<unsigned int, float> b) {
+      [](const std::pair<unsigned int, float> a, const std::pair<unsigned int, float> b) {
         return std::get<1>(a) < std::get<1>(b);
       });
     // remove all dominated items
@@ -82,5 +84,37 @@ AAL_knapsackResult AAL_knapsack_exact(AAL_knapsackInstance instance) {
     items[i] = bestSubset.element(i);
   }
   AAL_knapsackResult result{items, numberOfItems, bestSubset.value()};
+  return result;
+}
+
+AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const float eps) {
+  // check there is no access to non existing data
+  if (instance.numberOfItems == 0) {
+    throw std::runtime_error("AAL_knapsack_fptas can't handle empty instances.\n");
+  }
+  // compute \mu
+  float mu = instance.itemValues[0];
+  for (unsigned int i = 1; i < instance.numberOfItems; ++i) {
+    if (instance.itemValues[i] > mu && instance.itemValues[i] <= instance.capacity) {
+      mu = instance.itemValues[i];
+    }
+  }
+  mu *= eps / instance.numberOfItems;
+  // round the values
+  float* roundedItemValues = (float*) malloc(instance.numberOfItems * sizeof(float));
+  for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
+    roundedItemValues[i] = std::floor(instance.itemValues[i] / mu) * mu;
+  }
+  AAL_knapsackInstance roundedInstance{
+    instance.itemSizes, roundedItemValues, instance.numberOfItems, instance.capacity};
+  // invoke the exact knapsack on the rounded data
+  AAL_knapsackResult result = AAL_knapsack_exact(roundedInstance);
+  free(roundedItemValues);
+  // retranslate the solution on the rounded data to the original data
+  float objectiveValue = 0.0f;
+  for (unsigned int i = 0; i < result.numberOfItems; ++i) {
+    objectiveValue += instance.itemValues[result.items[i]];
+  }
+  result.objectiveValue = objectiveValue;
   return result;
 }

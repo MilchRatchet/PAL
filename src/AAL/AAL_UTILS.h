@@ -2,13 +2,13 @@
 #define AAL_UTILS_H
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
-  void example();
+void example();
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif /* AAL_UTILS_H */
