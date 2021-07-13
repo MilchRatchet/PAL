@@ -4,6 +4,7 @@
 
 #include "TEST_CONVEXHULL.h"
 #include "TEST_knapsack.h"
+#include "TEST_metricTSP.h"
 #include "TEST_setcover.h"
 #include "TEST_UTILS.h"
 
@@ -29,6 +30,7 @@ void select_tests(int argc, char** argv) {
     std::cout << "     KSE     |   AAL   | knapsack exact\n";
     std::cout << "     KSF     |   AAL   | knapsack FPTAS\n";
     std::cout << "     SCG     |   AAL   | setcover greedy\n";
+    std::cout << "     TSN     |   AAL   | metric TSP nearest addition\n";
     std::cout << "     CHC     |   CGL   | convex hull chan\n";
     std::cout << "     CHJ     |   CGL   | convex hull jarvis\n";
   }
@@ -39,6 +41,9 @@ void select_tests(int argc, char** argv) {
   }
   if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("SCG") != 0) {
     TEST_SETCOVER_GREEDY();
+  }
+  if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("TSN") != 0) {
+    TEST_METRIC_TSP_NEAREST_ADDITION();
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("CHC") != 0) {
     TEST_CONVEXHULL_CHAN();
