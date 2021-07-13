@@ -7,11 +7,11 @@
 
 metricTSP_result AAL_metricTSP_nearest_addition(const metricTSP_instance instance) {
   if (instance.numberOfVertices < 2) {
-    throw std::runtime_error("Hamiltonian path on a graph with less than 2 nodes makes no sense.\n");
+    throw std::runtime_error("Hamiltonian path on a graph with less than 2 nodes makes no sense.");
   }
   // find the 2 vertices with minimal distance
   float minimumDistance = std::numeric_limits<float>::max();
-  unsigned int min_i, min_j;
+  unsigned int min_i = 0, min_j = 0;
   for (unsigned int i = 0; i < instance.numberOfVertices; ++i) {
     for (unsigned int j = 0; j < i; ++j) {
       if (instance.distance(i, j, instance.metricSpace) < minimumDistance) {
@@ -20,6 +20,9 @@ metricTSP_result AAL_metricTSP_nearest_addition(const metricTSP_instance instanc
         min_j           = j;
       }
     }
+  }
+  if (min_i == min_j) {
+    throw std::runtime_error("No shortest distance between 2 vertices found.");
   }
 
   // initialize vector S of vertices in the hamiltonian path an T with the other vertices
