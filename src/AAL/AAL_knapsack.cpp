@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
+#include <numeric>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -116,5 +118,66 @@ AAL_knapsackResult AAL_knapsack_fptas(const AAL_knapsackInstance instance, const
     objectiveValue += instance.itemValues[result.items[i]];
   }
   result.objectiveValue = objectiveValue;
+  return result;
+}
+
+AAL_knapsackResult AAL_knapsack_min(const AAL_knapsackInstance instance) {
+  // copy sizes and values into vectors
+  std::vector<unsigned int> zeros;
+  std::vector<float> sizes(instance.numberOfItems), values(instance.numberOfItems);
+  for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
+    sizes[i]  = instance.itemSizes[i];
+    values[i] = instance.itemValues[i];
+    if (values[i] == 0) {
+      zeros.push_back(i);  // keep track of zeros, because later will be divided by values
+    }
+  }
+
+  std::vector<unsigned int> A, A_complement(instance.numberOfItems);
+  std::iota(A_complement.begin(), A_complement.end(), 0);
+  // items of value 0 will be no longer considered
+  for (int i = zeros.size() - 1; i >= 0; ++i) {
+    std::swap(A_complement[A_complement.size() - 1], A_complement[zeros[i]]);
+    A_complement.pop_back();
+  }
+
+  float value = 0;
+  while (value < instance.capacity) {
+    if (A_complement.size() == 0) {
+      throw std::logic_error("Minimum knapsack is infeasible on that instance!");
+    }
+    // cap the item values to the value gap left and
+    // find the constraint the becomes tight first
+    float min              = std::numeric_limits<float>::max();
+    unsigned int min_index = 0;
+    for (unsigned int i = 0; i < A_complement.size(); ++i) {
+      values[A_complement[i]] = std::min(values[A_complement[i]], instance.capacity - value);
+      if (sizes[A_complement[i]] / values[A_complement[i]] < min) {
+        min       = sizes[A_complement[i]] / values[A_complement[i]];
+        min_index = i;
+      }
+    }
+
+    value += instance.itemValues[A_complement[min_index]];
+    A.push_back(A_complement[min_index]);
+    // remove the element from the remaining elements A_complement
+    std::swap(A_complement[min_index], A_complement[A_complement.size() - 1]);
+    A_complement.pop_back();
+
+    // reduce the sizes by the value times the dual variable
+    for (unsigned int i = 0; i < A_complement.size(); ++i) {
+      sizes[A_complement[i]] -= min * values[A_complement[i]];
+    }
+  }
+
+  // construct the solution
+  unsigned int* items  = (unsigned int*) malloc(A.size() * sizeof(unsigned int));
+  float objectiveValue = 0;
+  for (unsigned int i = 0; i < A.size(); ++i) {
+    objectiveValue += instance.itemSizes[A[i]];
+    items[i] = A[i];
+  }
+
+  knapsackResult result{items, (unsigned int) A.size(), objectiveValue};
   return result;
 }
