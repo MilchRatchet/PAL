@@ -75,6 +75,7 @@ void TEST_KNAPSACK(std::set<std::string> testset) {
         && compareAryUInt(result.items, result.numberOfItems, subset2, 5),
       "AAL_MINIMUM_KNAPSACK");
     free(subset2);
+    free(result.items);
   }
 
   free(instance.itemSizes);
