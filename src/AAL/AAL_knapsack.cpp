@@ -128,7 +128,7 @@ AAL_knapsackResult AAL_knapsack_min(const AAL_knapsackInstance instance) {
   for (unsigned int i = 0; i < instance.numberOfItems; ++i) {
     sizes[i]  = instance.itemSizes[i];
     values[i] = instance.itemValues[i];
-    if (values[i] == 0) {
+    if (values[i] == 0.0f) {
       zeros.push_back(i);  // keep track of zeros, because later will be divided by values
     }
   }
@@ -141,7 +141,7 @@ AAL_knapsackResult AAL_knapsack_min(const AAL_knapsackInstance instance) {
     A_complement.pop_back();
   }
 
-  float value = 0;
+  float value = 0.0f;
   while (value < instance.capacity) {
     if (A_complement.size() == 0) {
       throw std::logic_error("Minimum knapsack is infeasible on that instance!");
@@ -172,7 +172,7 @@ AAL_knapsackResult AAL_knapsack_min(const AAL_knapsackInstance instance) {
 
   // construct the solution
   unsigned int* items  = (unsigned int*) malloc(A.size() * sizeof(unsigned int));
-  float objectiveValue = 0;
+  float objectiveValue = 0.0f;
   for (unsigned int i = 0; i < A.size(); ++i) {
     objectiveValue += instance.itemSizes[A[i]];
     items[i] = A[i];
