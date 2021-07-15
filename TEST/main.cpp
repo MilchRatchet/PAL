@@ -29,6 +29,7 @@ void select_tests(int argc, char** argv) {
     std::cout << "-------------|---------|-------------------\n";
     std::cout << "     KSE     |   AAL   | knapsack exact\n";
     std::cout << "     KSF     |   AAL   | knapsack FPTAS\n";
+    std::cout << "     KSM     |   AAL   | minimum knapsack\n";
     std::cout << "     SCG     |   AAL   | setcover greedy\n";
     std::cout << "     TSN     |   AAL   | metric TSP nearest addition\n";
     std::cout << "     CHC     |   CGL   | convex hull chan\n";
@@ -36,7 +37,7 @@ void select_tests(int argc, char** argv) {
   }
 
   if (
-    testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0 || testset.count("KSF") != 0) {
+    testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0 || testset.count("KSF") != 0 || testset.count("KSM") != 0) {
     TEST_KNAPSACK(testset);
   }
   if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("SCG") != 0) {

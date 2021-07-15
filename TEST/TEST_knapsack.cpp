@@ -60,6 +60,23 @@ void TEST_KNAPSACK(std::set<std::string> testset) {
       "AAL_KNAPSACK_FPTAS");
     free(result.items);
   }
+  if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSM") != 0) {
+    unsigned int* subset2 = (unsigned int*) malloc(5 * sizeof(unsigned int));
+    subset2[0]            = 7;
+    subset2[1]            = 0;
+    subset2[2]            = 1;
+    subset2[3]            = 4;
+    subset2[4]            = 3;
+
+    AAL_knapsackResult result = AAL_knapsack_min(instance);
+
+    print_check(
+      std::abs(result.objectiveValue - 9.6f) < 0.00001f
+        && compareAryUInt(result.items, result.numberOfItems, subset2, 5),
+      "AAL_MINIMUM_KNAPSACK");
+    free(subset2);
+    free(result.items);
+  }
 
   free(instance.itemSizes);
   free(instance.itemValues);
