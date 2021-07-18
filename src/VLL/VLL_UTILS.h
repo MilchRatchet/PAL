@@ -37,10 +37,18 @@ typedef struct vll_line {
   VLL_Color_t color;
 } VLL_Line_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 VLL_Color_t VLL_UTILS_GETCOLOR(VLL_Color_Preset_t preset);
 VLL_Color_t VLL_UTILS_COLOR(const int code);
 VLL_Point_t VLL_UTILS_GETPOINT(float x, float y, int radius, VLL_Color_t color);
 VLL_Line_t VLL_UTILS_GETLINE(VLL_Point_t a, VLL_Point_t b, VLL_Color_t color);
 void VLL_RenderDrawCircle(SDL_Renderer* renderer, int x, int y, int radius);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* VLL_UTILS_H */

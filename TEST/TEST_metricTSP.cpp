@@ -19,7 +19,7 @@ float distance(const unsigned int i, const unsigned int j, const void* metricSpa
 }
 
 void TEST_METRIC_TSP_NEAREST_ADDITION() {
-  TEST_PRINT_INPROGRESS("AAL metric TSP nearest addition");
+  TEST_PRINT_INPROGRESS((char*)"AAL metric TSP nearest addition");
 
   srand(clock());
   unsigned int count = 10 + (rand() & 0x8f);
@@ -59,9 +59,9 @@ void TEST_METRIC_TSP_NEAREST_ADDITION() {
 
   VLL_SCREEN_UPDATE(&screen);
 
-  int success = VLL_SCREEN_GETUSERVALIDATION(&screen);
+  int success = VLL_SCREEN_GETUSERVALIDATION();
 
-  TEST_PRINT_RESULT(success, "AAL metricTSP nearest addition");
+  TEST_PRINT_RESULT(success, (char*)"AAL metricTSP nearest addition");
 
   VLL_SCREEN_DESTROY(&screen);
   VLL_CONTAINER_DESTROY(&container);
