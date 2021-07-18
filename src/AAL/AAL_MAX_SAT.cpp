@@ -2,23 +2,24 @@
 
 #include <cmath>
 #include <random>
-#include <utility>
+#include <unordered_map>
 #include <vector>
 
 enum Literal { _true, _false, _not_found };
 
-Literal findVariable(const std::vector<std::pair<unsigned int, bool>> literals, const int var) {
-  for (unsigned int k = 0; k < literals.size(); ++k) {
-    if (std::get<0>(literals[k]) == (unsigned int) std::abs(var)) {
-      if ((var > 0 && std::get<1>(literals[k]) == true) || (var < 0 && std::get<1>(literals[k]) == false)) {
-        return _true;
-      }
-      else {
-        return _false;
-      }
+Literal findVariable(const std::unordered_map<unsigned int, bool> literals, const int var) {
+  std::unordered_map<unsigned int, bool>::const_iterator it = literals.find(std::abs(var));
+  if (it == literals.end()) {
+    return _not_found;
+  }
+  else {
+    if ((var > 0 && it->second == true) || (var < 0 && it->second == false)) {
+      return _true;
+    }
+    else {
+      return _false;
     }
   }
-  return _not_found;
 }
 
 MaxSatResult AAL_MaxSat_unbiased(const MaxSatInstance instance) {
@@ -28,7 +29,7 @@ MaxSatResult AAL_MaxSat_unbiased(const MaxSatInstance instance) {
   std::uniform_int_distribution<> rand(0, 1);
 
   float objectiveValue = 0.0f;
-  std::vector<std::pair<unsigned int, bool>> literals;
+  std::unordered_map<unsigned int, bool> literals;
   unsigned int iterator = 0;
   for (unsigned int i = 0; i < instance.numberOfClauses; ++i) {
     for (unsigned int j = 0; j < instance.clausesSizes[i]; ++j) {
@@ -36,7 +37,7 @@ MaxSatResult AAL_MaxSat_unbiased(const MaxSatInstance instance) {
       Literal lit = findVariable(literals, var);
       if (lit == _not_found) {
         bool state = (rand(gen) == 1);
-        literals.push_back(std::pair<unsigned int, bool>{std::abs(var), state});
+        literals.insert({std::abs(var), state});
         if ((state == true && var > 0) || (state == false && var < 0)) {
           lit = _true;
         }
@@ -57,9 +58,11 @@ MaxSatResult AAL_MaxSat_unbiased(const MaxSatInstance instance) {
   const unsigned int numberOfVariables = literals.size();
   unsigned int* variables              = (unsigned int*) malloc(sizeof(unsigned int) * numberOfVariables);
   bool* variableStates                 = (bool*) malloc(sizeof(bool) * numberOfVariables);
-  for (unsigned int i = 0; i < literals.size(); ++i) {
-    variables[i]      = std::get<0>(literals[i]);
-    variableStates[i] = std::get<1>(literals[i]);
+  unsigned int i                       = 0;
+  for (const std::pair<unsigned int, bool>& element : literals) {
+    variables[i]      = element.first;
+    variableStates[i] = element.second;
+    ++i;
   }
 
   AAL_MaxSatResult result{objectiveValue, numberOfVariables, variables, variableStates, 0};
