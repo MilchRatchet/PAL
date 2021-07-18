@@ -50,21 +50,22 @@ void TEST_MAX_SAT_unbiased() {
   AAL_MaxSatInstance instance{numberOfClauses, clausesSizes, weights, clauses};
 
   /*
-   * ATTENTION: The test of this algorithm is a hypothesis test which is marked as passed if the null hypothesis
-   * H_0: The Algorithm is no 0.5 approximation algorihtm is discarded (with a p-value of 0.05)
-   * I think this is not a good test design because the expected value for the particular instance is 12 + 37/320
+   * ATTENTION: The test of this algorithm has a big draw back because of dealing with rondomness. The test is marked as
+   * passed if the empiric median of 200 calls of the algorithm is at least half the optimal value, since the algorithm
+   * guarantes to be a 0.5 approximation in expectation.
+   * Never the less the tests lags because it is impossible to produce a solution that doesn't fullfill this bound, but
+   * the bound would be tight only in the case of only unit clauses, which is also not a good test.
+   * Just to mention: The expected value for the particular instance is 12 + 37/320.
    */
-  unsigned int count = 0;
-  unsigned int n     = 200;
+  float sumOV    = 0.0f;
+  unsigned int n = 200;
   for (unsigned int i = 0; i < n; ++i) {
     AAL_MaxSatResult result = AAL_MaxSat_unbiased(instance);
-    if (result.objectiveValue < 6.5f) {
-      ++count;
-    }
+    sumOV += result.objectiveValue;
     free(result.variables);
     free(result.variableStates);
   }
-  print_check(count <= n / 20, "AAL_MAX_SAT_UNBIASED");
+  print_check(sumOV / n >= 6.25, "AAL_MAX_SAT_UNBIASED");
 
   free(clausesSizes);
   free(weights);
