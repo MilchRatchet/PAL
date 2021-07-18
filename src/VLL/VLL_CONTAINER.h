@@ -12,11 +12,19 @@ typedef struct vll_container {
   unsigned int lines_length;
 } VLL_Container_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void VLL_CONTAINER_INIT(VLL_Container_t* container);
 void VLL_CONTAINER_ADDPOINT(VLL_Container_t* container, VLL_Point_t point);
 void VLL_CONTAINER_ADDPOINTS(VLL_Container_t* container, VLL_Point_t* points, unsigned int points_count);
 void VLL_CONTAINER_ADDLINE(VLL_Container_t* container, VLL_Line_t line);
 void VLL_CONTAINER_ADDLINES(VLL_Container_t* container, VLL_Line_t* lines, unsigned int lines_count);
 void VLL_CONTAINER_DESTROY(VLL_Container_t* container);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* VLL_CONTAINER_H */
