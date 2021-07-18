@@ -4,6 +4,7 @@
 
 #include "TEST_CONVEXHULL.h"
 #include "TEST_knapsack.h"
+#include "TEST_MAX_SAT.h"
 #include "TEST_metricTSP.h"
 #include "TEST_setcover.h"
 #include "TEST_UTILS.h"
@@ -30,6 +31,7 @@ void select_tests(int argc, char** argv) {
     std::cout << "     KSE     |   AAL   | knapsack exact\n";
     std::cout << "     KSF     |   AAL   | knapsack FPTAS\n";
     std::cout << "     KSM     |   AAL   | minimum knapsack\n";
+    std::cout << "     MSU     |   AAL   | MAX SAT unbiased\n";
     std::cout << "     SCG     |   AAL   | setcover greedy\n";
     std::cout << "     TSN     |   AAL   | metric TSP nearest addition\n";
     std::cout << "     CHC     |   CGL   | convex hull chan\n";
@@ -37,8 +39,12 @@ void select_tests(int argc, char** argv) {
   }
 
   if (
-    testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0 || testset.count("KSF") != 0 || testset.count("KSM") != 0) {
+    testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("KSE") != 0 || testset.count("KSF") != 0
+    || testset.count("KSM") != 0) {
     TEST_KNAPSACK(testset);
+  }
+  if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("MSU") != 0) {
+    TEST_MAX_SAT_unbiased();
   }
   if (testset.count("FULL") != 0 || testset.count("AAL") != 0 || testset.count("SCG") != 0) {
     TEST_SETCOVER_GREEDY();
