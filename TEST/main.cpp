@@ -37,6 +37,9 @@ void select_tests(int argc, char** argv) {
     std::cout << "     TSN     |   AAL   | metric TSP nearest addition\n";
     std::cout << "     CHC     |   CGL   | convex hull chan\n";
     std::cout << "     CHJ     |   CGL   | convex hull jarvis\n";
+    std::cout << "     POQ     |   CGL   | polygon quickstar\n";
+    std::cout << "     POU     |   CGL   | polygon uniform quickstar\n";
+    std::cout << "     POM     |   CGL   | polygon monotone\n";
   }
 
   if (
@@ -58,6 +61,12 @@ void select_tests(int argc, char** argv) {
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("CHJ") != 0) {
     TEST_CONVEXHULL_JARVIS();
+  }
+  if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POQ") != 0) {
+    TEST_POLYGON_QUICKSTAR();
+  }
+  if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POU") != 0) {
+    TEST_POLYGON_UNIFORMQUICKSTAR();
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POM") != 0) {
     TEST_POLYGON_MONOTONE();

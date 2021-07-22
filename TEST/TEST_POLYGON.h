@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+void TEST_POLYGON_QUICKSTAR();
+void TEST_POLYGON_UNIFORMQUICKSTAR();
 void TEST_POLYGON_MONOTONE();
 
 #ifdef __cplusplus
