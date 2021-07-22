@@ -3,6 +3,7 @@
 #include <string>
 
 #include "TEST_CONVEXHULL.h"
+#include "TEST_POLYGON.h"
 #include "TEST_knapsack.h"
 #include "TEST_MAX_SAT.h"
 #include "TEST_metricTSP.h"
@@ -57,6 +58,9 @@ void select_tests(int argc, char** argv) {
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("CHJ") != 0) {
     TEST_CONVEXHULL_JARVIS();
+  }
+  if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POM") != 0) {
+    TEST_POLYGON_MONOTONE();
   }
 }
 
