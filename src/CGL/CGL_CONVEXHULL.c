@@ -24,7 +24,7 @@ void CGL_CONVEXHULL_FREE(CGL_Convexhull_t* hull) {
  * WARNING: May fail when more than 2 points are collinear.
  */
 CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, const unsigned int count) {
-  CGL_Convexhull_t err_result = {.points = 0, .count = -1};
+  CGL_Convexhull_t err_result = {.points = (unsigned int*) 0, .count = 0};
   if (!points)
     return err_result;
 
@@ -110,7 +110,7 @@ CGL_Convexhull_t CGL_CONVEXHULL_JARVIS(CGL_Point_t* points, const unsigned int c
  * WARNING: May fail when more than 2 points are collinear.
  */
 CGL_Convexhull_t CGL_CONVEXHULL_CHAN(CGL_Point_t* points, const unsigned int count) {
-  CGL_Convexhull_t err_result = {.points = 0, .count = -1};
+  CGL_Convexhull_t err_result = {.points = (unsigned int*) 0, .count = 0};
   if (!points)
     return err_result;
 

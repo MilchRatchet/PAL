@@ -18,7 +18,7 @@ static int angle_cmp(const void* a, const void* b) {
   float p1 = *(float*) a;
   float p2 = *(float*) b;
 
-  return p2 < p1;
+  return p2 > p1;
 }
 
 static CGL_Polygon_t _STAR_POLYGON_FROM_POINT(CGL_Point_t middle, CGL_Point_t* points, const unsigned int count) {
@@ -249,4 +249,83 @@ CGL_Polygon_t CGL_POLYGON_MONOTONE(CGL_Point_t* points, const unsigned int count
   return result;
 }
 
-CGL_Convexhull_t CGL_POLYGON_CONVEXHULL(CGL_Polygon_t* polygon, CGL_Point_t* points, const unsigned int count);
+CGL_Convexhull_t CGL_POLYGON_CONVEXHULL(CGL_Polygon_t* polygon, CGL_Point_t* points, const unsigned int count) {
+  CGL_Convexhull_t err_result = {.points = (unsigned int*) 0, .count = 0};
+  if (!points || !polygon || polygon->count != count)
+    return err_result;
+
+  if (count <= 3) {
+    CGL_Convexhull_t result = {.points = malloc(sizeof(unsigned int) * count), .count = count};
+    for (unsigned int i = 0; i < count; i++) {
+      result.points[i] = i;
+    }
+    return result;
+  }
+
+  unsigned int* scratch      = malloc(sizeof(unsigned int) * 2 * (count + 1));
+  unsigned int scratch_begin = count;
+  unsigned int scratch_end   = count + 1;
+
+  {
+    CGL_Point_t v1 = points[polygon->points[0]];
+    CGL_Point_t v2 = points[polygon->points[1]];
+    CGL_Point_t v3 = points[polygon->points[2]];
+
+    if (CGL_UTILS_ORIENTATION(v1, v2, v3) == 1) {
+      scratch[scratch_end++] = polygon->points[0];
+      scratch[scratch_end++] = polygon->points[1];
+    }
+    else {
+      scratch[scratch_begin--] = polygon->points[1];
+      scratch[scratch_begin--] = polygon->points[0];
+    }
+
+    scratch[scratch_begin--] = polygon->points[2];
+    scratch[scratch_end++]   = polygon->points[2];
+  }
+
+  for (unsigned int i = 3; i < count; i++) {
+    unsigned int index = polygon->points[i];
+    CGL_Point_t p      = points[index];
+
+    int condition1 = 1;
+    int condition2 = 1;
+
+    if (CGL_UTILS_ORIENTATION(p, points[scratch[scratch_begin + 1]], points[scratch[scratch_begin + 2]]) == 1)
+      condition1 = 0;
+
+    if (CGL_UTILS_ORIENTATION(points[scratch[scratch_end - 2]], points[scratch[scratch_end - 1]], p) == 1)
+      condition2 = 0;
+
+    if (!condition1 && !condition2)
+      continue;
+
+    while (condition1) {
+      scratch_begin++;
+
+      if (CGL_UTILS_ORIENTATION(p, points[scratch[scratch_begin + 1]], points[scratch[scratch_begin + 2]]) >= 0)
+        condition1 = 0;
+    }
+
+    scratch[scratch_begin--] = index;
+
+    while (condition2) {
+      scratch_end--;
+
+      if (CGL_UTILS_ORIENTATION(points[scratch[scratch_end - 2]], points[scratch[scratch_end - 1]], p) >= 0)
+        condition2 = 0;
+    }
+
+    scratch[scratch_end++] = index;
+  }
+
+  const unsigned int hull_count = scratch_end - scratch_begin - 2;
+
+  CGL_Convexhull_t result = {.points = malloc(sizeof(unsigned int) * hull_count), .count = hull_count};
+
+  memcpy(result.points, scratch + scratch_begin + 1, sizeof(unsigned int) * hull_count);
+
+  free(scratch);
+
+  return result;
+}

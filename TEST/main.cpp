@@ -40,6 +40,7 @@ void select_tests(int argc, char** argv) {
     std::cout << "     POQ     |   CGL   | polygon quickstar\n";
     std::cout << "     POU     |   CGL   | polygon uniform quickstar\n";
     std::cout << "     POM     |   CGL   | polygon monotone\n";
+    std::cout << "     POC     |   CGL   | polygon convex hull\n";
   }
 
   if (
@@ -70,6 +71,9 @@ void select_tests(int argc, char** argv) {
   }
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POM") != 0) {
     TEST_POLYGON_MONOTONE();
+  }
+  if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POC") != 0) {
+    TEST_POLYGON_CONVEXHULL();
   }
 }
 

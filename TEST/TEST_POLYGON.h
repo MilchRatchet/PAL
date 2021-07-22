@@ -8,6 +8,7 @@ extern "C" {
 void TEST_POLYGON_QUICKSTAR();
 void TEST_POLYGON_UNIFORMQUICKSTAR();
 void TEST_POLYGON_MONOTONE();
+void TEST_POLYGON_CONVEXHULL();
 
 #ifdef __cplusplus
 }
