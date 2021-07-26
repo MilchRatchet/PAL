@@ -9,6 +9,12 @@ typedef struct cgl_polygon {
   unsigned int count;
 } CGL_Polygon_t;
 
+typedef struct cgl_polydiagonals {
+  unsigned int* vertex1;
+  unsigned int* vertex2;
+  unsigned int count;
+} CGL_Polydiagonals_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,6 +24,12 @@ extern "C" {
  * \param polygon Polygon to be freed.
  */
 void CGL_POLYGON_FREE(CGL_Polygon_t* polygon);
+
+/*!
+ * \brief Frees an instance of polydiagonals.
+ * \param diagonals Polydiagonals to be freed.
+ */
+void CGL_POLYGON_DIAGONALSFREE(CGL_Polydiagonals_t* diagonals);
 
 /*!
  * \brief Computes deterministically a star shaped polygon from a given point set.
@@ -59,6 +71,7 @@ CGL_Polygon_t CGL_POLYGON_MONOTONE(CGL_Point_t* points, const unsigned int count
 
 /*!
  * \brief Computes the convex hull from a given polygon whose indices are ordered clockwise.
+ * \param polygon Polygon
  * \param points List of vertices
  * \param count Number of vertices
  * \return Indices of the vertices on the convex hull in clockwise order.
@@ -68,6 +81,19 @@ CGL_Polygon_t CGL_POLYGON_MONOTONE(CGL_Point_t* points, const unsigned int count
  *          where n = "number of points"
  */
 CGL_Convexhull_t CGL_POLYGON_CONVEXHULL(CGL_Polygon_t* polygon, CGL_Point_t* points, const unsigned int count);
+
+/*!
+ * \brief Computes a triangulation from a given x-monotone polygon whose indices are ordered clockwise.
+ * \param polygon Polygon
+ * \param points List of vertices
+ * \param count Number of vertices
+ * \return A triangulation of the polygon.
+ * \details Monotone Polygon Triangulation Algorithm
+ *          Time Complexity: O(n log n)
+ *          Space Complexity: O(n)
+ *          where n = "number of points"
+ */
+CGL_Polydiagonals_t CGL_POLYGON_MONTRIANGLE(CGL_Polygon_t* polygon, CGL_Point_t* points, const unsigned int count);
 
 #ifdef __cplusplus
 }

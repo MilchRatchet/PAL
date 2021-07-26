@@ -75,6 +75,9 @@ void select_tests(int argc, char** argv) {
   if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POC") != 0) {
     TEST_POLYGON_CONVEXHULL();
   }
+  if (testset.count("FULL") != 0 || testset.count("CGL") != 0 || testset.count("POT") != 0) {
+    TEST_POLYGON_MONTRIANGLE();
+  }
 }
 
 /*
